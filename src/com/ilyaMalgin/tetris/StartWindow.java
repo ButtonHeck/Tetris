@@ -24,7 +24,7 @@ public class StartWindow extends JFrame {
         authorLabel = new javax.swing.JLabel();
         speedSlider = new javax.swing.JSlider();
 
-        nameLabel.setText("Tetris v0.1");
+        nameLabel.setText("Tetris v0.2");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -111,7 +111,8 @@ public class StartWindow extends JFrame {
 
     private void startButtonPressed(ActionEvent evt) {
         setVisible(false);
-        new Game();
+        Game game = new Game(this);
+        game.requestFocus();
     }
 
     private void setColumns(ActionEvent evt) {
@@ -119,7 +120,6 @@ public class StartWindow extends JFrame {
     }
 
     public static void main(String args[]) {
-        //System.setProperty("sun.java2d.opengl", "True");
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

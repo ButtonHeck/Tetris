@@ -19,30 +19,35 @@ public class Game extends JFrame implements Runnable {
             GRID_HEIGHT = Options.getColumns(),
             SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE,
             SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE;
-    private volatile boolean running = false;
+
+    private volatile boolean running;
+    private StartWindow startWindow;
     private Thread gameThread;
     private BufferStrategy bs;
     private Graphics g;
     private int[] pixels;
     private BufferedImage boardImage;
-    private int boardColor = 0xFF9999AA;
+    private int boardColor = 0xFF8899AA;
 
     //logic staff
-    private static ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
+    private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
     private static ArrayList<Shape> shapesOnBoard = new ArrayList<>();
     private Shape currentShape;
 
-    public Game() {
+    public Game(StartWindow window) {
+        this.startWindow = window;
         pixels = new int[SCREEN_HEIGHT * SCREEN_WIDTH];
         boardImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
         createBoardImageData();
         initializeBricksMap();
+        shapesOnBoard.clear();
         debugMouseListener();
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                    System.exit(0);
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    stop();
+                }
                 if (currentShape.moveEnded() || !running)
                     return;
                 if (e.getKeyCode() == KeyEvent.VK_D)
@@ -80,9 +85,16 @@ public class Game extends JFrame implements Runnable {
             return;
         running = false;
         try {
-            gameThread.join();
+            if (Thread.currentThread() != gameThread) {
+                dispose();
+                gameThread.join();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            System.out.println(running);
+            startWindow.setVisible(true);
+            startWindow.setLocationRelativeTo(null);
         }
     }
 
@@ -101,7 +113,10 @@ public class Game extends JFrame implements Runnable {
                 update();
                 render();
                 if (!currentShape.moveEnded()) {
-                    currentShape.tryMove(0, 1);
+                    if (running)
+                        currentShape.tryMove(0, 1);
+                    else
+                        dispose();
                 }
                 delta = 0;
             }
@@ -134,7 +149,7 @@ public class Game extends JFrame implements Runnable {
                 break;
         }
         if (adjacentFullRows != 0) {
-            boardColor = 0xFFAAAABB;
+            boardColor = 0xFF99AABB;
             createBoardImageData();
             removeFullLines(firstFullRow, adjacentFullRows);
         }
@@ -164,7 +179,7 @@ public class Game extends JFrame implements Runnable {
         for (int i = 0; i < shapesOnBoard.size(); i++) {
             shapesOnBoard.get(i).render(g);
         }
-        boardColor = 0xFF9999AA;
+        boardColor = 0xFF8899AA;
         createBoardImageData();
         bs.show();
         g.dispose();
@@ -207,6 +222,7 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initializeBricksMap() {
+        bricksMap.clear();
         for (int i = 0; i < GRID_HEIGHT * GRID_WIDTH; i++) {
             bricksMap.add(0);
         }
@@ -214,6 +230,8 @@ public class Game extends JFrame implements Runnable {
 
     public static void renewMap() {
         Collections.fill(bricksMap, 0);
-        shapesOnBoard.forEach(shape -> shape.placeOnMap(bricksMap));
+        synchronized (bricksMap) {
+            shapesOnBoard.forEach(shape -> shape.placeOnMap(bricksMap));
+        }
     }
 }
