@@ -13,20 +13,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Game extends JFrame implements Runnable {
-    //Application staff
+    //Application stuff
     public static final int BLOCK_SIZE = 40, GRID_WIDTH = 8;
     public static int GRID_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT;
 
     private volatile boolean running;
+    private boolean firstUpdateHappen, boardColorChanged;
     private StartWindow startWindow;
     private Thread gameThread;
     private BufferStrategy bs;
     private Graphics g;
     private int[] pixels;
     private BufferedImage boardImage;
+    private Canvas canvas;
     private int boardColor = 0xFF8899AA;
 
-    //logic staff
+    //logic stuff
     private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
     private static ArrayList<Shape> shapesOnBoard = new ArrayList<>();
     private Shape currentShape;
@@ -34,17 +36,31 @@ public class Game extends JFrame implements Runnable {
     public Game(StartWindow window) {
         this.startWindow = window;
         initializeWindowParameters();
-        pixels = new int[SCREEN_HEIGHT * SCREEN_WIDTH];
-        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-        setLocationRelativeTo(null);
-
-        boardImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        createBoardImageData();
+        initializeCanvasParameters();
+        initializeGraphicsData();
         initializeBricksMap();
-        shapesOnBoard.clear();
+        if (!shapesOnBoard.isEmpty())
+            shapesOnBoard.clear();
 
+        setupWindowOnScreen();
+        initializeInputListeners();
+
+        gameThread = new Thread(this, "Game window thread");
+        start();
+    }
+
+    private void setupWindowOnScreen() {
+        pack();
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
+        setResizable(false);
+        canvas.requestFocusInWindow();
+    }
+
+    private void initializeInputListeners() {
         debugMouseListener();
-        addKeyListener(new KeyAdapter() {
+        canvas.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -63,19 +79,25 @@ public class Game extends JFrame implements Runnable {
                 else if (e.getKeyCode() == KeyEvent.VK_SPACE)
                     currentShape.drop();
                 update();
-                render();
+                //double check to prevent "java.lang.IllegalStateException: Component must have a valid peer" in bs
+                if (running)
+                    render();
             }
         });
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
-        setResizable(false);
+    }
 
-        System.out.println(getWidth() + "x" + getHeight());
-        /*this shows proper stats as it should be,
-        but in fact occasionally the actual size of the window is cut on the upper side*/
+    private void initializeGraphicsData() {
+        boardImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        pixels = new int[SCREEN_HEIGHT * SCREEN_WIDTH];
+        createBoardImageData();
+    }
 
-        gameThread = new Thread(this, "Main game thread");
-        start();
+    private void initializeCanvasParameters() {
+        canvas = new Canvas();
+        canvas.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        canvas.setMaximumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        canvas.setMinimumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        add(canvas);
     }
 
     private static void initializeWindowParameters() {
@@ -103,7 +125,6 @@ public class Game extends JFrame implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            //System.out.println(running);
             startWindow.setVisible(true);
             startWindow.setLocationRelativeTo(null);
         }
@@ -111,13 +132,15 @@ public class Game extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         spawn();
         double ups = Options.getSpeed() / 12;
         long last = System.nanoTime(), now;
         double delta = 0;
         double timePerUpdate = 1_000_000_000 / ups;
         while (running) {
+            if (!firstUpdateHappen) {
+                renderBeforeFirstUpdate();
+            }
             now = System.nanoTime();
             delta += (now - last) / timePerUpdate;
             last = now;
@@ -131,6 +154,7 @@ public class Game extends JFrame implements Runnable {
                         dispose();
                 }
                 delta = 0;
+                firstUpdateHappen = true;
             }
         }
     }
@@ -140,7 +164,7 @@ public class Game extends JFrame implements Runnable {
         Shape shape = Shape.getRandomShape();
         currentShape = shape;
         shapesOnBoard.add(shape);
-        renewMap();
+        renewBricksMap();
         if (bricksCollide()) {
             render();
             System.out.println("LOSE!");
@@ -161,6 +185,7 @@ public class Game extends JFrame implements Runnable {
                 break;
         }
         if (adjacentFullRows != 0) {
+            boardColorChanged = true;
             boardColor = 0xFF99AABB;
             createBoardImageData();
             removeFullLines(firstFullRow, adjacentFullRows);
@@ -171,19 +196,31 @@ public class Game extends JFrame implements Runnable {
         for (int i = 0; i < adjacentFullRows; ++i) {
             shapesOnBoard.forEach(shape -> shape.detach(removableRow));
         }
-        renewMap();
+        renewBricksMap();
     }
 
     public void update() {
         if (currentShape.moveEnded())
             spawn();
-        renewMap();
+        renewBricksMap();
+    }
+
+    private void renderBeforeFirstUpdate() {
+        bs = canvas.getBufferStrategy();
+        if (bs == null) {
+            canvas.createBufferStrategy(2);
+            renderBeforeFirstUpdate();
+        }
+        g = bs.getDrawGraphics();
+        g.drawImage(boardImage, 0, 0, null);
+        bs.show();
+        g.dispose();
     }
 
     public void render() {
-        bs = getBufferStrategy();
+        bs = canvas.getBufferStrategy();
         if (bs == null) {
-            createBufferStrategy(3);
+            canvas.createBufferStrategy(2);
             return;
         }
         g = bs.getDrawGraphics();
@@ -191,8 +228,11 @@ public class Game extends JFrame implements Runnable {
         for (int i = 0; i < shapesOnBoard.size(); i++) {
             shapesOnBoard.get(i).render(g);
         }
-        boardColor = 0xFF8899AA;
-        createBoardImageData();
+        if (boardColorChanged) {
+            boardColor = 0xFF8899AA;
+            createBoardImageData();
+            boardColorChanged = false;
+        }
         bs.show();
         g.dispose();
     }
@@ -202,7 +242,7 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void debugMouseListener() {
-        addMouseListener(new MouseInputAdapter() {
+        canvas.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println(e.getX() / BLOCK_SIZE + 1 + ":" + (e.getY() / BLOCK_SIZE + 1) + ", shapes on board:" + shapesOnBoard.size());
@@ -240,7 +280,7 @@ public class Game extends JFrame implements Runnable {
         }
     }
 
-    public static void renewMap() {
+    public static void renewBricksMap() {
         Collections.fill(bricksMap, 0);
         synchronized (bricksMap) {
             shapesOnBoard.forEach(shape -> shape.placeOnMap(bricksMap));

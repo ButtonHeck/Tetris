@@ -59,7 +59,7 @@ public class Shape {
             block.setGlobX(block.getGlobX() + x);
             block.setGlobY(block.getGlobY() + y);
         });
-        Game.renewMap();
+        Game.renewBricksMap();
         if (Game.bricksCollide()) {
             if (y != 0)
                 moveEnded = true;
@@ -92,7 +92,7 @@ public class Shape {
                 it.remove();
             }
         }
-        Game.renewMap();
+        Game.renewBricksMap();
         detachDrop(y);
     }
 
@@ -103,7 +103,7 @@ public class Shape {
                 temp.setGlobY(temp.getGlobY() + 1);
             }
         }
-        Game.renewMap();
+        Game.renewBricksMap();
     }
 
     public void rotate(boolean left) {
@@ -116,7 +116,7 @@ public class Shape {
             int dy2 = left ? block.getRelX() : -block.getRelX();
             block.relocate(dx1, dy1, dx2, dy2);
         });
-        Game.renewMap();
+        Game.renewBricksMap();
         if (Game.bricksCollide()) {
             //System.out.println("Rotate incorrect");
             blocks.forEach(block -> {

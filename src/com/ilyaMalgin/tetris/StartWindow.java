@@ -24,7 +24,7 @@ public class StartWindow extends JFrame {
         authorLabel = new javax.swing.JLabel();
         speedSlider = new javax.swing.JSlider();
 
-        nameLabel.setText("Tetris v0.21");
+        nameLabel.setText("Tetris v0.3");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -109,14 +109,13 @@ public class StartWindow extends JFrame {
         Options.setSpeed(speedSlider.getModel().getValue());
     }
 
-    private void startButtonPressed(ActionEvent evt) {
-        setVisible(false);
-        Game game = new Game(this);
-        game.requestFocus();
-    }
-
     private void setColumns(ActionEvent evt) {
         Options.setColumns(columnsComboBox.getItemAt(columnsComboBox.getSelectedIndex()));
+    }
+
+    private void startButtonPressed(ActionEvent evt) {
+        setVisible(false);
+        new Game(this);
     }
 
     public static void main(String args[]) {
