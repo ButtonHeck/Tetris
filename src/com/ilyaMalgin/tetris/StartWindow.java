@@ -24,7 +24,7 @@ public class StartWindow extends JFrame {
         authorLabel = new javax.swing.JLabel();
         speedSlider = new javax.swing.JSlider();
 
-        nameLabel.setText("Tetris v0.3");
+        nameLabel.setText("Tetris v0.31");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);

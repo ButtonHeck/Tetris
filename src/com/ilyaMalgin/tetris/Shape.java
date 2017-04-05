@@ -87,7 +87,7 @@ public class Shape {
 
     public void detach(int y) {
         Iterator<Block> it = blocks.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             if (it.next().getGlobY() == y) {
                 it.remove();
             }
@@ -118,7 +118,6 @@ public class Shape {
         });
         Game.renewBricksMap();
         if (Game.bricksCollide()) {
-            //System.out.println("Rotate incorrect");
             blocks.forEach(block -> {
                 int dx1 = left ? block.getRelY() : -block.getRelY();
                 int dy1 = -block.getRelY();
@@ -142,10 +141,11 @@ public class Shape {
     }
 
     public void placeOnMap(ArrayList<Integer> map) {
-        blocks.forEach(block ->
-                map.set(block.getGlobY() * Game.GRID_WIDTH + block.getGlobX(),
-                        map.get(block.getGlobY() * Game.GRID_WIDTH + block.getGlobX()) + 1)
-        );
+        synchronized (blocks) {
+            blocks.forEach(block ->
+                    map.set(block.getGlobY() * Game.GRID_WIDTH + block.getGlobX(),
+                            map.get(block.getGlobY() * Game.GRID_WIDTH + block.getGlobX()) + 1));
+        }
     }
 
     public void render(Graphics g) {

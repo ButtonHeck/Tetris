@@ -18,7 +18,7 @@ public class Game extends JFrame implements Runnable {
     public static int GRID_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT;
 
     private volatile boolean running;
-    private boolean firstUpdateHappen, boardColorChanged;
+    private boolean firstUpdateHappen, boardColorChanged, paused;
     private StartWindow startWindow;
     private Thread gameThread;
     private BufferStrategy bs;
@@ -66,13 +66,27 @@ public class Game extends JFrame implements Runnable {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     stop();
                 }
-                if (currentShape.moveEnded() || !running)
+                if (e.getKeyCode() == KeyEvent.VK_P) {
+                    paused = !paused;
+                    createBoardImageData(paused ? 0x888888 : boardColor);
+                    if (running)
+                        render();
+                }
+                if (currentShape.moveEnded() || !running || paused)
                     return;
-                if (e.getKeyCode() == KeyEvent.VK_D)
-                    currentShape.tryMove(1, 0);
-                else if (e.getKeyCode() == KeyEvent.VK_A)
-                    currentShape.tryMove(-1, 0);
-                else if (e.getKeyCode() == KeyEvent.VK_W)
+                if (e.getKeyCode() == KeyEvent.VK_D) {
+                    if (e.isShiftDown()) {
+                        while (!currentShape.sideBorderReached(1))
+                            currentShape.tryMove(1, 0);
+                    } else
+                        currentShape.tryMove(1, 0);
+                } else if (e.getKeyCode() == KeyEvent.VK_A) {
+                    if (e.isShiftDown()) {
+                        while (!currentShape.sideBorderReached(-1))
+                            currentShape.tryMove(-1, 0);
+                    } else
+                        currentShape.tryMove(-1, 0);
+                } else if (e.getKeyCode() == KeyEvent.VK_W)
                     currentShape.rotate(true);
                 else if (e.getKeyCode() == KeyEvent.VK_S)
                     currentShape.rotate(false);
@@ -89,7 +103,7 @@ public class Game extends JFrame implements Runnable {
     private void initializeGraphicsData() {
         boardImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
         pixels = new int[SCREEN_HEIGHT * SCREEN_WIDTH];
-        createBoardImageData();
+        createBoardImageData(boardColor);
     }
 
     private void initializeCanvasParameters() {
@@ -145,9 +159,10 @@ public class Game extends JFrame implements Runnable {
             delta += (now - last) / timePerUpdate;
             last = now;
             if (delta >= 1) {
-                update();
+                if (!paused)
+                    update();
                 render();
-                if (!currentShape.moveEnded()) {
+                if (!currentShape.moveEnded() && !paused) {
                     if (running)
                         currentShape.tryMove(0, 1);
                     else
@@ -187,7 +202,7 @@ public class Game extends JFrame implements Runnable {
         if (adjacentFullRows != 0) {
             boardColorChanged = true;
             boardColor = 0xFF99AABB;
-            createBoardImageData();
+            createBoardImageData(boardColor);
             removeFullLines(firstFullRow, adjacentFullRows);
         }
     }
@@ -230,7 +245,7 @@ public class Game extends JFrame implements Runnable {
         }
         if (boardColorChanged) {
             boardColor = 0xFF8899AA;
-            createBoardImageData();
+            createBoardImageData(boardColor);
             boardColorChanged = false;
         }
         bs.show();
@@ -252,7 +267,7 @@ public class Game extends JFrame implements Runnable {
         });
     }
 
-    private void createBoardImageData() {
+    private void createBoardImageData(int boardColor) {
         int colorDelta = boardColor;
         int[] colorSquares = new int[GRID_HEIGHT * GRID_WIDTH];
         for (int i = 0; i < colorSquares.length; i++) {
