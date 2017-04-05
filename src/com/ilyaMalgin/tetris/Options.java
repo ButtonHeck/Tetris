@@ -3,7 +3,7 @@ package com.ilyaMalgin.tetris;
 public class Options {
 
     private static int speed;
-    private static int columns = 15;
+    private static int columns = 14;
 
     public static double getSpeed() {
         return speed;

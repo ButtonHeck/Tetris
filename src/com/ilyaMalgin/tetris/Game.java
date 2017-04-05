@@ -14,11 +14,8 @@ import java.util.Collections;
 
 public class Game extends JFrame implements Runnable {
     //Application staff
-    public static final int BLOCK_SIZE = 40,
-            GRID_WIDTH = 8,
-            GRID_HEIGHT = Options.getColumns(),
-            SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE,
-            SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE;
+    public static final int BLOCK_SIZE = 40, GRID_WIDTH = 8;
+    public static int GRID_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT;
 
     private volatile boolean running;
     private StartWindow startWindow;
@@ -36,11 +33,16 @@ public class Game extends JFrame implements Runnable {
 
     public Game(StartWindow window) {
         this.startWindow = window;
+        initializeWindowParameters();
         pixels = new int[SCREEN_HEIGHT * SCREEN_WIDTH];
+        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        setLocationRelativeTo(null);
+
         boardImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
         createBoardImageData();
         initializeBricksMap();
         shapesOnBoard.clear();
+
         debugMouseListener();
         addKeyListener(new KeyAdapter() {
             @Override
@@ -64,13 +66,22 @@ public class Game extends JFrame implements Runnable {
                 render();
             }
         });
-        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
+
+        System.out.println(getWidth() + "x" + getHeight());
+        /*this shows proper stats as it should be,
+        but in fact occasionally the actual size of the window is cut on the upper side*/
+
         gameThread = new Thread(this, "Main game thread");
         start();
+    }
+
+    private static void initializeWindowParameters() {
+        GRID_HEIGHT = Options.getColumns();
+        SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE;
+        SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE;
     }
 
     public synchronized void start() {
@@ -92,7 +103,7 @@ public class Game extends JFrame implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            System.out.println(running);
+            //System.out.println(running);
             startWindow.setVisible(true);
             startWindow.setLocationRelativeTo(null);
         }
@@ -100,6 +111,7 @@ public class Game extends JFrame implements Runnable {
 
     @Override
     public void run() {
+        setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         spawn();
         double ups = Options.getSpeed() / 12;
         long last = System.nanoTime(), now;
@@ -194,8 +206,8 @@ public class Game extends JFrame implements Runnable {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println(e.getX() / BLOCK_SIZE + 1 + ":" + (e.getY() / BLOCK_SIZE + 1) + ", shapes on board:" + shapesOnBoard.size());
-                for (int i = 0; i < bricksMap.size(); )
-                    System.out.print(bricksMap.get(i) + (++i % GRID_WIDTH == 0 ? "\n" : ", "));
+                /*for (int i = 0; i < bricksMap.size(); )
+                    System.out.print(bricksMap.get(i) + (++i % GRID_WIDTH == 0 ? "\n" : ", "));*/
             }
         });
     }
