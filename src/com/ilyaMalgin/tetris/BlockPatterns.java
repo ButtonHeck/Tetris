@@ -88,7 +88,7 @@ public abstract class BlockPatterns {
                 return get_Z_mirror_pattern();
             }
             default: {
-                throw new IllegalArgumentException("Unsupported pattern index: " + blockPattern);
+                throw new IllegalArgumentException("Incorrect pattern index: " + blockPattern);
             }
         }
     }

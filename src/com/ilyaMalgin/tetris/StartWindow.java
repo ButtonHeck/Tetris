@@ -24,7 +24,7 @@ public class StartWindow extends JFrame {
         authorLabel = new javax.swing.JLabel();
         speedSlider = new javax.swing.JSlider();
 
-        nameLabel.setText("Tetris v0.31");
+        nameLabel.setText("Tetris v0.4");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -37,7 +37,7 @@ public class StartWindow extends JFrame {
         columnsLabel.setText("Choose number of columns");
 
         authorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        authorLabel.setText("Made by Ilya Malgin");
+        authorLabel.setText("Made by Ilya Malgin, 2017");
 
         speedSlider.setMajorTickSpacing(5);
         speedSlider.setMaximum(40);
@@ -50,7 +50,7 @@ public class StartWindow extends JFrame {
         speedSlider.setValue(25);
 
         speedLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        speedLabel.setText("Speed:" + speedSlider.getModel().getValue());
+        speedLabel.setText("Speed: " + speedSlider.getModel().getValue());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

@@ -86,12 +86,7 @@ public class Shape {
     }
 
     public void detach(int y) {
-        Iterator<Block> it = blocks.iterator();
-        while (it.hasNext()) {
-            if (it.next().getGlobY() == y) {
-                it.remove();
-            }
-        }
+        blocks.removeIf(block -> block.getGlobY() == y);
         Game.renewBricksMap();
         detachDrop(y);
     }

@@ -1,6 +1,7 @@
 package com.ilyaMalgin.tetris;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -26,7 +27,8 @@ public class Game extends JFrame implements Runnable {
     private int[] pixels;
     private BufferedImage boardImage;
     private Canvas canvas;
-    private int boardColor = 0xFF8899AA;
+    private int boardColor = 0xFF8899AA, score = 0;
+    private JLabel scoreLabel = new JLabel("Score: " + 0);
 
     //logic stuff
     private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
@@ -38,18 +40,56 @@ public class Game extends JFrame implements Runnable {
         initializeWindowParameters();
         initializeCanvasParameters();
         initializeGraphicsData();
-        initializeBricksMap();
-        if (!shapesOnBoard.isEmpty())
-            shapesOnBoard.clear();
-
-        setupWindowOnScreen();
+        initializeLogicMaps();
+        setupLayoutAndScore();
+        allocateGameOnScreen();
         initializeInputListeners();
 
         gameThread = new Thread(this, "Game window thread");
         start();
     }
 
-    private void setupWindowOnScreen() {
+    private static void initializeWindowParameters() {
+        GRID_HEIGHT = Options.getColumns();
+        SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE;
+        SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE;
+    }
+
+    private void initializeCanvasParameters() {
+        canvas = new Canvas();
+        canvas.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        canvas.setMaximumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        canvas.setMinimumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        add(canvas);
+    }
+
+    private void initializeGraphicsData() {
+        boardImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        pixels = new int[SCREEN_HEIGHT * SCREEN_WIDTH];
+        createBoardImageData(boardColor);
+    }
+
+    private void initializeLogicMaps() {
+        bricksMap.clear();
+        for (int i = 0; i < GRID_HEIGHT * GRID_WIDTH; i++) {
+            bricksMap.add(0);
+        }
+        if (!shapesOnBoard.isEmpty())
+            shapesOnBoard.clear();
+    }
+
+    private void setupLayoutAndScore() {
+        scoreLabel.setFont(new Font("Monospaced", Font.PLAIN, 22));
+        add(scoreLabel);
+        BorderLayout layout = new BorderLayout(0, 0);
+        scoreLabel.setBorder(new MatteBorder(2, 1, 1, 1, Color.BLACK));
+        scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        layout.addLayoutComponent(canvas, BorderLayout.NORTH);
+        layout.addLayoutComponent(scoreLabel, BorderLayout.SOUTH);
+        setLayout(layout);
+    }
+
+    private void allocateGameOnScreen() {
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -69,6 +109,7 @@ public class Game extends JFrame implements Runnable {
                 if (e.getKeyCode() == KeyEvent.VK_P) {
                     paused = !paused;
                     createBoardImageData(paused ? 0x888888 : boardColor);
+                    renewScore(0);
                     if (running)
                         render();
                 }
@@ -98,26 +139,6 @@ public class Game extends JFrame implements Runnable {
                     render();
             }
         });
-    }
-
-    private void initializeGraphicsData() {
-        boardImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        pixels = new int[SCREEN_HEIGHT * SCREEN_WIDTH];
-        createBoardImageData(boardColor);
-    }
-
-    private void initializeCanvasParameters() {
-        canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        canvas.setMaximumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        canvas.setMinimumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        add(canvas);
-    }
-
-    private static void initializeWindowParameters() {
-        GRID_HEIGHT = Options.getColumns();
-        SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE;
-        SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE;
     }
 
     public synchronized void start() {
@@ -201,9 +222,10 @@ public class Game extends JFrame implements Runnable {
         }
         if (adjacentFullRows != 0) {
             boardColorChanged = true;
-            boardColor = 0xFF99AABB;
+            boardColor += adjacentFullRows * 0xFF080808;
             createBoardImageData(boardColor);
             removeFullLines(firstFullRow, adjacentFullRows);
+            renewScore(adjacentFullRows);
         }
     }
 
@@ -212,6 +234,11 @@ public class Game extends JFrame implements Runnable {
             shapesOnBoard.forEach(shape -> shape.detach(removableRow));
         }
         renewBricksMap();
+    }
+
+    private void renewScore(int adjacentFullRows) {
+        score += adjacentFullRows * adjacentFullRows;
+        scoreLabel.setText("Score: " + score + (paused ? " (paused)" : ""));
     }
 
     public void update() {
@@ -252,27 +279,12 @@ public class Game extends JFrame implements Runnable {
         g.dispose();
     }
 
-    public static boolean bricksCollide() {
-        return bricksMap.contains(2);
-    }
-
-    private void debugMouseListener() {
-        canvas.addMouseListener(new MouseInputAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println(e.getX() / BLOCK_SIZE + 1 + ":" + (e.getY() / BLOCK_SIZE + 1) + ", shapes on board:" + shapesOnBoard.size());
-                /*for (int i = 0; i < bricksMap.size(); )
-                    System.out.print(bricksMap.get(i) + (++i % GRID_WIDTH == 0 ? "\n" : ", "));*/
-            }
-        });
-    }
-
     private void createBoardImageData(int boardColor) {
         int colorDelta = boardColor;
         int[] colorSquares = new int[GRID_HEIGHT * GRID_WIDTH];
         for (int i = 0; i < colorSquares.length; i++) {
             colorSquares[i] = colorDelta;
-            colorDelta += 0x00_03_03_03;
+            colorDelta += 0x00_02_02_02;
         }
         pixels = ((DataBufferInt) boardImage.getRaster().getDataBuffer()).getData();
         int colorIndex = 0;
@@ -288,11 +300,19 @@ public class Game extends JFrame implements Runnable {
         }
     }
 
-    private void initializeBricksMap() {
-        bricksMap.clear();
-        for (int i = 0; i < GRID_HEIGHT * GRID_WIDTH; i++) {
-            bricksMap.add(0);
-        }
+    private void debugMouseListener() {
+        canvas.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println(e.getX() / BLOCK_SIZE + 1 + ":" + (e.getY() / BLOCK_SIZE + 1) + ", shapes on board:" + shapesOnBoard.size());
+                /*for (int i = 0; i < bricksMap.size(); )
+                    System.out.print(bricksMap.get(i) + (++i % GRID_WIDTH == 0 ? "\n" : ", "));*/
+            }
+        });
+    }
+
+    public static boolean bricksCollide() {
+        return bricksMap.contains(2);
     }
 
     public static void renewBricksMap() {
