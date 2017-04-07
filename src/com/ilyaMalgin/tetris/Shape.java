@@ -8,9 +8,9 @@ import java.util.Random;
 
 public class Shape {
 
-    public static final int SPAWN_X = 3, SPAWN_Y = 1;
+    public static int SPAWN_X = Game.GRID_WIDTH / 2 - 1, SPAWN_Y = 1;
     private int x, y;
-    private ArrayList<Block> blocks;
+    private final ArrayList<Block> blocks;
     private boolean rotatable;
     private volatile boolean moveEnded = false;
     private int blockPattern;
@@ -27,7 +27,7 @@ public class Shape {
     private static final Shape[] shapes = new Shape[]{L_SHAPE, T_SHAPE, I_SHAPE, CUBE_SHAPE, Z_SHAPE, L_MIRROR_SHAPE, Z_MIRROR_SHAPE};
 
     private Shape(boolean rotatable, int blockPattern, BufferedImage image) {
-        this.x = SPAWN_X;
+        this.x = blockPattern <= 4 ? SPAWN_X : SPAWN_X + 1;
         this.y = SPAWN_Y;
         this.blocks = new ArrayList<>();
         this.rotatable = rotatable;

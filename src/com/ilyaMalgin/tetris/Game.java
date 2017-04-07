@@ -15,8 +15,8 @@ import java.util.Collections;
 
 public class Game extends JFrame implements Runnable {
     //Application stuff
-    public static final int BLOCK_SIZE = 40, GRID_WIDTH = 8;
-    public static int GRID_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT;
+    public static final int BLOCK_SIZE = 40;
+    public static int GRID_HEIGHT, GRID_WIDTH, SCREEN_WIDTH, SCREEN_HEIGHT;
 
     private volatile boolean running;
     private boolean firstUpdateHappen, boardColorChanged, paused;
@@ -51,6 +51,7 @@ public class Game extends JFrame implements Runnable {
 
     private static void initializeWindowParameters() {
         GRID_HEIGHT = Options.getColumns();
+        GRID_WIDTH = Options.getRows();
         SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE;
         SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE;
     }
@@ -99,6 +100,7 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initializeInputListeners() {
+        //todo: this piece should probably be migrated to a game thread run method
         debugMouseListener();
         canvas.addKeyListener(new KeyAdapter() {
             @Override

@@ -4,6 +4,7 @@ public class Options {
 
     private static int speed;
     private static int columns = 14;
+    private static int rows = 8;
 
     public static double getSpeed() {
         return speed;
@@ -19,5 +20,12 @@ public class Options {
 
     public static void setColumns(int columns) {
         Options.columns = columns;
+    }
+
+    public static void setRows(int rows) {
+        Options.rows = rows;
+    }
+    public static int getRows() {
+        return rows;
     }
 }

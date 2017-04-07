@@ -50,8 +50,8 @@ public abstract class BlockPatterns {
         return new Block[]{
                 new Block(0, 0),
                 new Block(0, -1),
-                new Block(-1, 0),
-                new Block(-1, 1)
+                new Block(1, 0),
+                new Block(1, 1)
         };
     }
 
@@ -59,8 +59,8 @@ public abstract class BlockPatterns {
         return new Block[]{
                 new Block(0, 0),
                 new Block(0, -1),
-                new Block(1, 0),
-                new Block(1, 1)
+                new Block(-1, 0),
+                new Block(-1, 1)
         };
     }
 

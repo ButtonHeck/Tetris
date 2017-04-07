@@ -1,30 +1,35 @@
 package com.ilyaMalgin.tetris;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class StartWindow extends JFrame {
 
     private JButton startButton;
-    private JComboBox<Integer> columnsComboBox;
-    private JLabel nameLabel, columnsLabel, authorLabel, speedLabel;
+    private JComboBox<Integer> columnsComboBox, rowsComboBox;
+    private JLabel nameLabel, columnsLabel, authorLabel, speedLabel, rowsLabel;
     private JSlider speedSlider;
+    private JTextArea controlsText;
 
     public StartWindow() {
         initComponents();
     }
 
     private void initComponents() {
-        nameLabel = new javax.swing.JLabel();
-        startButton = new javax.swing.JButton();
+        nameLabel = new JLabel();
+        startButton = new JButton();
         columnsComboBox = new JComboBox<>();
-        speedLabel = new javax.swing.JLabel();
-        columnsLabel = new javax.swing.JLabel();
-        authorLabel = new javax.swing.JLabel();
-        speedSlider = new javax.swing.JSlider();
+        rowsComboBox = new JComboBox<>();
+        speedLabel = new JLabel();
+        columnsLabel = new JLabel();
+        rowsLabel = new JLabel();
+        authorLabel = new JLabel();
+        speedSlider = new JSlider();
+        controlsText = new JTextArea();
 
-        nameLabel.setText("Tetris v0.5");
+        nameLabel.setText("Tetris v0.6");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -34,9 +39,17 @@ public class StartWindow extends JFrame {
         columnsComboBox.addActionListener(this::setColumns);
         columnsComboBox.getModel().setSelectedItem(14);
 
-        columnsLabel.setText("Choose number of columns");
+        rowsComboBox.setModel(new DefaultComboBoxModel<>(new Integer[]{8, 9, 10}));
+        rowsComboBox.addActionListener(this::setRows);
+        rowsComboBox.getModel().setSelectedItem(8);
 
-        authorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        columnsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        columnsLabel.setText("Columns:");
+
+        rowsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        rowsLabel.setText("Rows:");
+
+        authorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         authorLabel.setText("Made by Ilya Malgin, 2017");
 
         speedSlider.setMajorTickSpacing(5);
@@ -49,52 +62,72 @@ public class StartWindow extends JFrame {
         speedSlider.addChangeListener(this::speedSliderStateChanged);
         speedSlider.setValue(25);
 
-        speedLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        speedLabel.setHorizontalAlignment(SwingConstants.CENTER);
         speedLabel.setText("Speed: " + speedSlider.getModel().getValue());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        controlsText.setEditable(false);
+        controlsText.setColumns(20);
+        controlsText.setRows(5);
+        controlsText.setText("A/D - move left/right\nW/S - rotate clockwise/counterclockwise\nP - pause\nSPACE - drop current figure\n\nHave a nice play :)\n");
+
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                 .addGap(0, 0, Short.MAX_VALUE)
                                                 .addComponent(authorLabel))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addContainerGap()
                                                                 .addComponent(nameLabel))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(102, 102, 102)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                        .addComponent(columnsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                        .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                        .addComponent(columnsComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                        .addComponent(speedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(startButton, GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                                                                        .addComponent(speedLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addGroup(layout.createSequentialGroup()
+                                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                                                                        .addComponent(columnsComboBox, GroupLayout.Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                        .addComponent(columnsLabel, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))
+                                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(rowsComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                        .addComponent(rowsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                                 .addContainerGap()
-                                                                .addComponent(speedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGap(0, 81, Short.MAX_VALUE)))
+                                                                .addComponent(speedSlider, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(81, 81, 81))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(controlsText)))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(nameLabel)
+                                .addGap(2, 2, 2)
+                                .addComponent(startButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
                                 .addComponent(speedLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(speedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(columnsLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(columnsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(speedSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(columnsLabel)
+                                        .addComponent(rowsLabel))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(columnsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(rowsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(controlsText, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(authorLabel)
                                 .addContainerGap())
         );
@@ -104,13 +137,17 @@ public class StartWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void speedSliderStateChanged(javax.swing.event.ChangeEvent evt) {
+    private void speedSliderStateChanged(ChangeEvent evt) {
         speedLabel.setText("Speed: " + speedSlider.getModel().getValue());
         Options.setSpeed(speedSlider.getModel().getValue());
     }
 
     private void setColumns(ActionEvent evt) {
         Options.setColumns(columnsComboBox.getItemAt(columnsComboBox.getSelectedIndex()));
+    }
+
+    private void setRows(ActionEvent event) {
+        Options.setRows(rowsComboBox.getItemAt(rowsComboBox.getSelectedIndex()));
     }
 
     private void startButtonPressed(ActionEvent evt) {
