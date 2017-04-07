@@ -108,7 +108,7 @@ public class Game extends JFrame implements Runnable {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_P) {
                     paused = !paused;
-                    createBoardImageData(paused ? 0x888888 : boardColor);
+                    createBoardImageData(paused ? 0x777777 : boardColor);
                     renewScore(0);
                     if (running)
                         render();
@@ -116,17 +116,9 @@ public class Game extends JFrame implements Runnable {
                 if (currentShape.moveEnded() || !running || paused)
                     return;
                 if (e.getKeyCode() == KeyEvent.VK_D) {
-                    if (e.isShiftDown()) {
-                        while (!currentShape.sideBorderReached(1))
-                            currentShape.tryMove(1, 0);
-                    } else
-                        currentShape.tryMove(1, 0);
+                    currentShape.tryMove(1, 0);
                 } else if (e.getKeyCode() == KeyEvent.VK_A) {
-                    if (e.isShiftDown()) {
-                        while (!currentShape.sideBorderReached(-1))
-                            currentShape.tryMove(-1, 0);
-                    } else
-                        currentShape.tryMove(-1, 0);
+                    currentShape.tryMove(-1, 0);
                 } else if (e.getKeyCode() == KeyEvent.VK_W)
                     currentShape.rotate(true);
                 else if (e.getKeyCode() == KeyEvent.VK_S)

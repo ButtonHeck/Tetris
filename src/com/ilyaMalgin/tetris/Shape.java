@@ -1,43 +1,42 @@
 package com.ilyaMalgin.tetris;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Random;
 
 public class Shape {
 
     public static final int SPAWN_X = 3, SPAWN_Y = 1;
     private int x, y;
-    private Color color;
     private ArrayList<Block> blocks;
     private boolean rotatable;
     private volatile boolean moveEnded = false;
     private int blockPattern;
-    private ColorPattern colorPattern;
+    private BufferedImage image;
 
-    private static final Shape L_SHAPE = new Shape(ColorPattern.L_MODEL, true, 0);
-    private static final Shape T_SHAPE = new Shape(ColorPattern.T_MODEL, true, 1);
-    private static final Shape I_SHAPE = new Shape(ColorPattern.I_MODEL, true, 2);
-    private static final Shape CUBE_SHAPE = new Shape(ColorPattern.CUBE_MODEL, false, 3);
-    private static final Shape Z_SHAPE = new Shape(ColorPattern.Z_MODEL, true, 4);
-    private static final Shape L_MIRROR_SHAPE = new Shape(ColorPattern.L_MODEL, true, 5);
-    private static final Shape Z_MIRROR_SHAPE = new Shape(ColorPattern.Z_MODEL, true, 6);
+    private static final Shape L_SHAPE = new Shape(true, 0, BlockSheet.L_SHAPE_IMAGE);
+    private static final Shape T_SHAPE = new Shape(true, 1, BlockSheet.T_SHAPE_IMAGE);
+    private static final Shape I_SHAPE = new Shape(true, 2, BlockSheet.I_SHAPE_IMAGE);
+    private static final Shape CUBE_SHAPE = new Shape(false, 3, BlockSheet.CUBE_SHAPE_IMAGE);
+    private static final Shape Z_SHAPE = new Shape(true, 4, BlockSheet.Z_SHAPE_IMAGE);
+    private static final Shape L_MIRROR_SHAPE = new Shape(true, 5, BlockSheet.L_SHAPE_IMAGE);
+    private static final Shape Z_MIRROR_SHAPE = new Shape(true, 6, BlockSheet.Z_SHAPE_IMAGE);
 
     private static final Shape[] shapes = new Shape[]{L_SHAPE, T_SHAPE, I_SHAPE, CUBE_SHAPE, Z_SHAPE, L_MIRROR_SHAPE, Z_MIRROR_SHAPE};
 
-    private Shape(ColorPattern pattern, boolean rotatable, int blockPattern) {
+    private Shape(boolean rotatable, int blockPattern, BufferedImage image) {
         this.x = SPAWN_X;
         this.y = SPAWN_Y;
-        this.colorPattern = pattern;
         this.blocks = new ArrayList<>();
         this.rotatable = rotatable;
         this.blockPattern = blockPattern;
+        this.image = image;
         Collections.addAll(blocks, BlockPatterns.getBlocks(blockPattern));
         blocks.forEach(e -> {
             e.setParent(this);
-            e.setColorModel(colorPattern);
+            e.setBlockImage(image);
             e.setGlobX(e.getGlobX() + this.x);
             e.setGlobY(e.getGlobY() + this.y);
         });
@@ -150,45 +149,11 @@ public class Shape {
     }
 
     public Shape copy() {
-        return new Shape(this.colorPattern, this.rotatable, this.blockPattern);
+        return new Shape(this.rotatable, this.blockPattern, this.image);
     }
 
     public static Shape getRandomShape() {
         return shapes[new Random().nextInt(7)].copy();
-    }
-
-    //Getters and Setters
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public ArrayList<Block> getBlocks() {
-        return blocks;
-    }
-
-    public void setBlocks(ArrayList<Block> blocks) {
-        this.blocks = blocks;
     }
 
     public boolean moveEnded() {

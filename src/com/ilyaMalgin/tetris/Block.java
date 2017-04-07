@@ -1,12 +1,13 @@
 package com.ilyaMalgin.tetris;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Block {
 
     private int globX, globY, relX, relY;
     private Shape parent;
-    private ColorPattern colorPattern;
+    private BufferedImage image;
 
     public Block(int globalX, int globalY) {
         this.globX = globalX;
@@ -15,21 +16,12 @@ public class Block {
         relY = globalY;
     }
 
-    public void setColorModel(ColorPattern model) {
-        this.colorPattern = model;
+    public void setBlockImage(BufferedImage image) {
+        this.image = image;
     }
 
     public void render(Graphics g) {
-        g.setColor(colorPattern.main);
-        g.fillRect(getGlobX() * Game.BLOCK_SIZE, getGlobY() * Game.BLOCK_SIZE, Game.BLOCK_SIZE, Game.BLOCK_SIZE);
-
-        g.setColor(colorPattern.darker);
-        g.fillRect(getGlobX() * Game.BLOCK_SIZE, getGlobY() * Game.BLOCK_SIZE, Game.BLOCK_SIZE, 2);
-        g.fillRect(getGlobX() * Game.BLOCK_SIZE + Game.BLOCK_SIZE - 2, getGlobY() * Game.BLOCK_SIZE, 2, Game.BLOCK_SIZE);
-
-        g.setColor(colorPattern.brighter);
-        g.fillRect(getGlobX() * Game.BLOCK_SIZE, getGlobY() * Game.BLOCK_SIZE + Game.BLOCK_SIZE - 2, Game.BLOCK_SIZE, 2);
-        g.fillRect(getGlobX() * Game.BLOCK_SIZE, getGlobY() * Game.BLOCK_SIZE, 2, Game.BLOCK_SIZE);
+        g.drawImage(image, getGlobX() * Game.BLOCK_SIZE, getGlobY() * Game.BLOCK_SIZE, Game.BLOCK_SIZE, Game.BLOCK_SIZE, null);
     }
 
     public void relocate(int dx1, int dy1, int dx2, int dy2) {
