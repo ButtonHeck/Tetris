@@ -34,6 +34,7 @@ public class Game extends JFrame implements Runnable {
     private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
     private static ArrayList<Shape> shapesOnBoard = new ArrayList<>();
     private Shape currentShape;
+    private boolean keys[] = new boolean[8]; //7 for keys, 8 is a flag that any event was occured
 
     public Game(StartWindow window) {
         this.startWindow = window;
@@ -77,6 +78,7 @@ public class Game extends JFrame implements Runnable {
         }
         if (!shapesOnBoard.isEmpty())
             shapesOnBoard.clear();
+        Shape.SPAWN_X = GRID_WIDTH / 2 - 1;
     }
 
     private void setupLayoutAndScore() {
@@ -100,37 +102,44 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initializeInputListeners() {
-        //todo: this piece should probably be migrated to a game thread run method
         debugMouseListener();
         canvas.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    stop();
-                }
-                if (e.getKeyCode() == KeyEvent.VK_P) {
-                    paused = !paused;
-                    createBoardImageData(paused ? 0x777777 : boardColor);
-                    renewScore(0);
-                    if (running)
-                        render();
-                }
-                if (currentShape.moveEnded() || !running || paused)
-                    return;
-                if (e.getKeyCode() == KeyEvent.VK_D) {
-                    currentShape.tryMove(1, 0);
-                } else if (e.getKeyCode() == KeyEvent.VK_A) {
-                    currentShape.tryMove(-1, 0);
-                } else if (e.getKeyCode() == KeyEvent.VK_W)
-                    currentShape.rotate(true);
-                else if (e.getKeyCode() == KeyEvent.VK_S)
-                    currentShape.rotate(false);
-                else if (e.getKeyCode() == KeyEvent.VK_SPACE)
-                    currentShape.drop();
-                update();
-                //double check to prevent "java.lang.IllegalStateException: Component must have a valid peer" in bs
-                if (running)
-                    render();
+                keys[7] = true;
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+                    keys[0] = true;
+                if (e.getKeyCode() == KeyEvent.VK_SPACE)
+                    keys[1] = true;
+                if (e.getKeyCode() == KeyEvent.VK_P)
+                    keys[2] = true;
+                if (e.getKeyCode() == KeyEvent.VK_W)
+                    keys[3] = true;
+                if (e.getKeyCode() == KeyEvent.VK_S)
+                    keys[4] = true;
+                if (e.getKeyCode() == KeyEvent.VK_A)
+                    keys[5] = true;
+                if (e.getKeyCode() == KeyEvent.VK_D)
+                    keys[6] = true;
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                keys[7] = false;
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+                    keys[0] = false;
+                if (e.getKeyCode() == KeyEvent.VK_SPACE)
+                    keys[1] = false;
+                if (e.getKeyCode() == KeyEvent.VK_P)
+                    keys[2] = false;
+                if (e.getKeyCode() == KeyEvent.VK_W)
+                    keys[3] = false;
+                if (e.getKeyCode() == KeyEvent.VK_S)
+                    keys[4] = false;
+                if (e.getKeyCode() == KeyEvent.VK_A)
+                    keys[5] = false;
+                if (e.getKeyCode() == KeyEvent.VK_D)
+                    keys[6] = false;
             }
         });
     }
@@ -186,7 +195,11 @@ public class Game extends JFrame implements Runnable {
                 delta = 0;
                 firstUpdateHappen = true;
             }
+            //if there is an unhandled keyboard signal handle it, otherwise no need to get in there
+            if (keys[7])
+                handleKeyboardEvents();
         }
+        dispose();
     }
 
     private void spawn() {
@@ -200,6 +213,42 @@ public class Game extends JFrame implements Runnable {
             System.out.println("LOSE!");
             stop();
         }
+    }
+
+    private void handleKeyboardEvents() {
+        keys[7] = false;
+        if (keys[0]) {
+            keys[0] = false;
+            stop();
+        }
+        if (keys[2]) {
+            keys[2] = false;
+            paused = !paused;
+            createBoardImageData(paused ? 0x777777 : boardColor);
+            renewScore(0);
+            if (running)
+                render();
+        }
+        if (currentShape.moveEnded() || !running || paused)
+            return;
+        if (keys[6]) {
+            keys[6] = false;
+            currentShape.tryMove(1, 0);
+        } else if (keys[5]) {
+            keys[5] = false;
+            currentShape.tryMove(-1, 0);
+        } else if (keys[3]) {
+            keys[3] = false;
+            currentShape.rotate(true);
+        } else if (keys[4]) {
+            keys[4] = false;
+            currentShape.rotate(false);
+        } else if (keys[1]) {
+            keys[1] = false;
+            currentShape.drop();
+        }
+        update();
+        render();
     }
 
     private void checkFullLines() {

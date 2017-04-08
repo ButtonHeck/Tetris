@@ -29,7 +29,7 @@ public class StartWindow extends JFrame {
         speedSlider = new JSlider();
         controlsText = new JTextArea();
 
-        nameLabel.setText("Tetris v0.6");
+        nameLabel.setText("Tetris v0.7");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
