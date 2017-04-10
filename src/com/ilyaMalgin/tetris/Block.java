@@ -21,7 +21,7 @@ public class Block {
     }
 
     public void render(Graphics g) {
-        g.drawImage(image, getGlobX() * Game.BLOCK_SIZE, getGlobY() * Game.BLOCK_SIZE, Game.BLOCK_SIZE, Game.BLOCK_SIZE, null);
+        g.drawImage(image, getGlobX() * Game.BLOCK_SIZE, getGlobY() * Game.BLOCK_SIZE, null);
     }
 
     public void relocate(int dx1, int dy1, int dx2, int dy2) {

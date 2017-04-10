@@ -4,8 +4,6 @@ import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -27,14 +25,14 @@ public class Game extends JFrame implements Runnable {
     private int[] pixels;
     private BufferedImage boardImage;
     private Canvas canvas;
-    private int boardColor = 0xFF8899AA, score = 0;
+    private int boardColor = 0xFF88A099, score = 0;
     private JLabel scoreLabel = new JLabel("Score: " + 0);
 
     //logic stuff
     private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
     private static ArrayList<Shape> shapesOnBoard = new ArrayList<>();
     private Shape currentShape;
-    private boolean keys[] = new boolean[8]; //7 for keys, 8 is a flag that any event was occured
+    private KeyboardController keyboardController;
 
     public Game(StartWindow window) {
         this.startWindow = window;
@@ -45,7 +43,6 @@ public class Game extends JFrame implements Runnable {
         setupLayoutAndScore();
         allocateGameOnScreen();
         initializeInputListeners();
-
         gameThread = new Thread(this, "Game window thread");
         start();
     }
@@ -78,7 +75,7 @@ public class Game extends JFrame implements Runnable {
         }
         if (!shapesOnBoard.isEmpty())
             shapesOnBoard.clear();
-        Shape.SPAWN_X = GRID_WIDTH / 2 - 1;
+        Shape.setSpawnX(GRID_WIDTH / 2 - 1);
     }
 
     private void setupLayoutAndScore() {
@@ -103,57 +100,16 @@ public class Game extends JFrame implements Runnable {
 
     private void initializeInputListeners() {
         debugMouseListener();
-        canvas.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                keys[7] = true;
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                    keys[0] = true;
-                if (e.getKeyCode() == KeyEvent.VK_SPACE)
-                    keys[1] = true;
-                if (e.getKeyCode() == KeyEvent.VK_P)
-                    keys[2] = true;
-                if (e.getKeyCode() == KeyEvent.VK_W)
-                    keys[3] = true;
-                if (e.getKeyCode() == KeyEvent.VK_S)
-                    keys[4] = true;
-                if (e.getKeyCode() == KeyEvent.VK_A)
-                    keys[5] = true;
-                if (e.getKeyCode() == KeyEvent.VK_D)
-                    keys[6] = true;
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                keys[7] = false;
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                    keys[0] = false;
-                if (e.getKeyCode() == KeyEvent.VK_SPACE)
-                    keys[1] = false;
-                if (e.getKeyCode() == KeyEvent.VK_P)
-                    keys[2] = false;
-                if (e.getKeyCode() == KeyEvent.VK_W)
-                    keys[3] = false;
-                if (e.getKeyCode() == KeyEvent.VK_S)
-                    keys[4] = false;
-                if (e.getKeyCode() == KeyEvent.VK_A)
-                    keys[5] = false;
-                if (e.getKeyCode() == KeyEvent.VK_D)
-                    keys[6] = false;
-            }
-        });
+        keyboardController = new KeyboardController();
+        canvas.addKeyListener(keyboardController);
     }
 
     public synchronized void start() {
-        if (running)
-            return;
         running = true;
         gameThread.start();
     }
 
     public synchronized void stop() {
-        if (!running)
-            return;
         running = false;
         try {
             if (Thread.currentThread() != gameThread) {
@@ -168,20 +124,24 @@ public class Game extends JFrame implements Runnable {
         }
     }
 
+    /*todo: blocks cannot move if they are on the top of the other blocks
+    * but next figure hasn't been spawned
+    * also, if currentShape landed on the other block, if you press drop button new currentShape will immediately drop
+    * right after its spawn moment*/
     @Override
     public void run() {
         spawn();
-        double ups = Options.getSpeed() / 12;
-        long last = System.nanoTime(), now;
+        final double updatesPerSecond = Options.getSpeed() / 12;
+        long lastUpdateTime = System.nanoTime(), nowTime;
         double delta = 0;
-        double timePerUpdate = 1_000_000_000 / ups;
+        double timePerUpdate = 1_000_000_000 / updatesPerSecond;
         while (running) {
             if (!firstUpdateHappen) {
                 renderBeforeFirstUpdate();
             }
-            now = System.nanoTime();
-            delta += (now - last) / timePerUpdate;
-            last = now;
+            nowTime = System.nanoTime();
+            delta += (nowTime - lastUpdateTime) / timePerUpdate;
+            lastUpdateTime = nowTime;
             if (delta >= 1) {
                 if (!paused)
                     update();
@@ -195,9 +155,13 @@ public class Game extends JFrame implements Runnable {
                 delta = 0;
                 firstUpdateHappen = true;
             }
-            //if there is an unhandled keyboard signal handle it, otherwise no need to get in there
-            if (keys[7])
+            if (keyboardController.hasUnhandledEvents())
                 handleKeyboardEvents();
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         dispose();
     }
@@ -216,13 +180,9 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void handleKeyboardEvents() {
-        keys[7] = false;
-        if (keys[0]) {
-            keys[0] = false;
+        if (keyboardController.escPressed())
             stop();
-        }
-        if (keys[2]) {
-            keys[2] = false;
+        if (keyboardController.pausePressed()) {
             paused = !paused;
             createBoardImageData(paused ? 0x777777 : boardColor);
             renewScore(0);
@@ -231,22 +191,17 @@ public class Game extends JFrame implements Runnable {
         }
         if (currentShape.moveEnded() || !running || paused)
             return;
-        if (keys[6]) {
-            keys[6] = false;
+        if (keyboardController.rightPressed())
             currentShape.tryMove(1, 0);
-        } else if (keys[5]) {
-            keys[5] = false;
+        if (keyboardController.leftPressed())
             currentShape.tryMove(-1, 0);
-        } else if (keys[3]) {
-            keys[3] = false;
+        if (keyboardController.rotateLPressed())
             currentShape.rotate(true);
-        } else if (keys[4]) {
-            keys[4] = false;
+        if (keyboardController.rotateRPressed())
             currentShape.rotate(false);
-        } else if (keys[1]) {
-            keys[1] = false;
+        if (keyboardController.dropPressed())
             currentShape.drop();
-        }
+        keyboardController.eventsHandled();
         update();
         render();
     }
@@ -314,7 +269,7 @@ public class Game extends JFrame implements Runnable {
             shapesOnBoard.get(i).render(g);
         }
         if (boardColorChanged) {
-            boardColor = 0xFF8899AA;
+            boardColor = 0xFF88A099;
             createBoardImageData(boardColor);
             boardColorChanged = false;
         }
@@ -327,7 +282,7 @@ public class Game extends JFrame implements Runnable {
         int[] colorSquares = new int[GRID_HEIGHT * GRID_WIDTH];
         for (int i = 0; i < colorSquares.length; i++) {
             colorSquares[i] = colorDelta;
-            colorDelta += 0x00_02_02_02;
+            colorDelta += 0x00_01_01_02;
         }
         pixels = ((DataBufferInt) boardImage.getRaster().getDataBuffer()).getData();
         int colorIndex = 0;

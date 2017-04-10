@@ -2,7 +2,6 @@ package com.ilyaMalgin.tetris;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class StartWindow extends JFrame {
@@ -29,7 +28,7 @@ public class StartWindow extends JFrame {
         speedSlider = new JSlider();
         controlsText = new JTextArea();
 
-        nameLabel.setText("Tetris v0.7");
+        nameLabel.setText("Tetris v0.75");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -166,6 +165,6 @@ public class StartWindow extends JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(StartWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        EventQueue.invokeLater(() -> new StartWindow().setVisible(true));
+        SwingUtilities.invokeLater(() -> new StartWindow().setVisible(true));
     }
 }
