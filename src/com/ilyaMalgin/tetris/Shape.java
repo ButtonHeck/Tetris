@@ -11,10 +11,10 @@ public class Shape {
     private static int spawnX = Game.GRID_WIDTH / 2 - 1;
     private int x, y;
     private final ArrayList<Block> blocks;
-    private boolean rotatable;
+    private final boolean rotatable;
     private volatile boolean moveEnded = false;
-    private int blockPattern;
-    private BufferedImage image;
+    private final int blockPattern;
+    private final BufferedImage image;
 
     private static final Shape L_SHAPE = new Shape(true, 0, BlockSheet.L_SHAPE_IMAGE);
     private static final Shape T_SHAPE = new Shape(true, 1, BlockSheet.T_SHAPE_IMAGE);
@@ -142,9 +142,9 @@ public class Shape {
         }
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics g, boolean isCurrent) {
         for (int i = 0; i < blocks.size(); i++) {
-            blocks.get(i).render(g);
+            blocks.get(i).render(g, isCurrent);
         }
     }
 
@@ -162,5 +162,9 @@ public class Shape {
 
     public static void setSpawnX(int spawnX) {
         Shape.spawnX = spawnX;
+    }
+
+    public int getBlockPattern() {
+        return blockPattern;
     }
 }

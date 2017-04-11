@@ -28,6 +28,25 @@ public class KeyboardController extends KeyAdapter {
             keys[D] = true;
     }
 
+    @Override
+    public void keyReleased(KeyEvent e) {
+        keys[HAS_PRESSED] = false;
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+            keys[ESCAPE] = false;
+        if (e.getKeyCode() == KeyEvent.VK_SPACE)
+            keys[SPACE] = false;
+        if (e.getKeyCode() == KeyEvent.VK_P)
+            keys[PAUSE] = false;
+        if (e.getKeyCode() == KeyEvent.VK_W)
+            keys[W] = false;
+        if (e.getKeyCode() == KeyEvent.VK_S)
+            keys[S] = false;
+        if (e.getKeyCode() == KeyEvent.VK_A)
+            keys[A] = false;
+        if (e.getKeyCode() == KeyEvent.VK_D)
+            keys[D] = false;
+    }
+
     public boolean escPressed() {
         boolean escPressed = keys[ESCAPE];
         keys[ESCAPE] = false;

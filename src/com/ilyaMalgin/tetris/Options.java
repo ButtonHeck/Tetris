@@ -5,6 +5,7 @@ public class Options {
     private static int speed;
     private static int columns = 14;
     private static int rows = 8;
+    private static boolean showNext = true;
 
     public static double getSpeed() {
         return speed;
@@ -25,7 +26,16 @@ public class Options {
     public static void setRows(int rows) {
         Options.rows = rows;
     }
+
     public static int getRows() {
         return rows;
+    }
+
+    public static void setShowNext(boolean showNext) {
+        Options.showNext = showNext;
+    }
+
+    public static boolean getShowNext() {
+        return showNext;
     }
 }

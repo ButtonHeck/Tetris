@@ -14,10 +14,10 @@ import java.util.Collections;
 public class Game extends JFrame implements Runnable {
     //Application stuff
     public static final int BLOCK_SIZE = 40;
-    public static int GRID_HEIGHT, GRID_WIDTH, SCREEN_WIDTH, SCREEN_HEIGHT;
+    public static int GRID_HEIGHT, GRID_WIDTH, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT;
 
     private volatile boolean running;
-    private boolean firstUpdateHappen, boardColorChanged, paused;
+    private boolean firstUpdateHappen, boardColorChanged, paused, showNext;
     private StartWindow startWindow;
     private Thread gameThread;
     private BufferStrategy bs;
@@ -25,13 +25,13 @@ public class Game extends JFrame implements Runnable {
     private int[] pixels;
     private BufferedImage boardImage;
     private Canvas canvas;
-    private int boardColor = 0xFF88A099, score = 0;
-    private JLabel scoreLabel = new JLabel("Score: " + 0);
+    private int boardColor = 0xFF889999, score = 0;
+    private JLabel scoreLabel = new JLabel("Speed: " + (int) Options.getSpeed() + ", Score: " + 0);
 
     //logic stuff
     private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
     private static ArrayList<Shape> shapesOnBoard = new ArrayList<>();
-    private Shape currentShape;
+    private Shape currentShape, nextShape;
     private KeyboardController keyboardController;
 
     public Game(StartWindow window) {
@@ -50,21 +50,22 @@ public class Game extends JFrame implements Runnable {
     private static void initializeWindowParameters() {
         GRID_HEIGHT = Options.getColumns();
         GRID_WIDTH = Options.getRows();
-        SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE;
-        SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE;
+        GAME_SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE;
+        GAME_SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE;
     }
 
     private void initializeCanvasParameters() {
         canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        canvas.setMaximumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        canvas.setMinimumSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        showNext = Options.getShowNext();
+        canvas.setPreferredSize(new Dimension(GAME_SCREEN_WIDTH + (showNext ? 200 : 0), GAME_SCREEN_HEIGHT));
+        canvas.setMaximumSize(new Dimension(GAME_SCREEN_WIDTH + (showNext ? 200 : 0), GAME_SCREEN_HEIGHT));
+        canvas.setMinimumSize(new Dimension(GAME_SCREEN_WIDTH + (showNext ? 200 : 0), GAME_SCREEN_HEIGHT));
         add(canvas);
     }
 
     private void initializeGraphicsData() {
-        boardImage = new BufferedImage(SCREEN_WIDTH, SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        pixels = new int[SCREEN_HEIGHT * SCREEN_WIDTH];
+        boardImage = new BufferedImage(GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        pixels = new int[GAME_SCREEN_HEIGHT * GAME_SCREEN_WIDTH];
         createBoardImageData(boardColor);
     }
 
@@ -79,7 +80,7 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void setupLayoutAndScore() {
-        scoreLabel.setFont(new Font("Monospaced", Font.PLAIN, 22));
+        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         add(scoreLabel);
         BorderLayout layout = new BorderLayout(0, 0);
         scoreLabel.setBorder(new MatteBorder(2, 1, 1, 1, Color.BLACK));
@@ -99,7 +100,6 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initializeInputListeners() {
-        debugMouseListener();
         keyboardController = new KeyboardController();
         canvas.addKeyListener(keyboardController);
     }
@@ -124,10 +124,6 @@ public class Game extends JFrame implements Runnable {
         }
     }
 
-    /*todo: blocks cannot move if they are on the top of the other blocks
-    * but next figure hasn't been spawned
-    * also, if currentShape landed on the other block, if you press drop button new currentShape will immediately drop
-    * right after its spawn moment*/
     @Override
     public void run() {
         spawn();
@@ -168,9 +164,9 @@ public class Game extends JFrame implements Runnable {
 
     private void spawn() {
         checkFullLines();
-        Shape shape = Shape.getRandomShape();
-        currentShape = shape;
-        shapesOnBoard.add(shape);
+        currentShape = nextShape == null ? Shape.getRandomShape() : nextShape;
+        nextShape = Shape.getRandomShape();
+        shapesOnBoard.add(currentShape);
         renewBricksMap();
         if (bricksCollide()) {
             render();
@@ -180,11 +176,12 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void handleKeyboardEvents() {
+        keyboardController.eventsHandled();
         if (keyboardController.escPressed())
             stop();
         if (keyboardController.pausePressed()) {
             paused = !paused;
-            createBoardImageData(paused ? 0x777777 : boardColor);
+            createBoardImageData(paused ? 0x333333 : boardColor);
             renewScore(0);
             if (running)
                 render();
@@ -201,7 +198,6 @@ public class Game extends JFrame implements Runnable {
             currentShape.rotate(false);
         if (keyboardController.dropPressed())
             currentShape.drop();
-        keyboardController.eventsHandled();
         update();
         render();
     }
@@ -236,7 +232,7 @@ public class Game extends JFrame implements Runnable {
 
     private void renewScore(int adjacentFullRows) {
         score += adjacentFullRows * adjacentFullRows;
-        scoreLabel.setText("Score: " + score + (paused ? " (paused)" : ""));
+        scoreLabel.setText("Speed: " + (int) Options.getSpeed() + ", Score: " + score + (paused ? " (paused)" : ""));
     }
 
     public void update() {
@@ -266,15 +262,25 @@ public class Game extends JFrame implements Runnable {
         g = bs.getDrawGraphics();
         g.drawImage(boardImage, 0, 0, null);
         for (int i = 0; i < shapesOnBoard.size(); i++) {
-            shapesOnBoard.get(i).render(g);
+            shapesOnBoard.get(i).render(g, true);
         }
         if (boardColorChanged) {
-            boardColor = 0xFF88A099;
+            boardColor = 0xFF889999;
             createBoardImageData(boardColor);
             boardColorChanged = false;
         }
+        if (showNext)
+            renderSideParts();
         bs.show();
         g.dispose();
+    }
+
+    private void renderSideParts() {
+        g.clearRect(GAME_SCREEN_WIDTH, 0, 200, GAME_SCREEN_HEIGHT);
+        nextShape.render(g, false);
+        g.drawLine(GAME_SCREEN_WIDTH, 0, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
+        g.setFont(new Font("Arial", Font.PLAIN, 18));
+        g.drawString("Next:", GAME_SCREEN_WIDTH + 70, 40);
     }
 
     private void createBoardImageData(int boardColor) {
@@ -286,27 +292,16 @@ public class Game extends JFrame implements Runnable {
         }
         pixels = ((DataBufferInt) boardImage.getRaster().getDataBuffer()).getData();
         int colorIndex = 0;
-        for (int y = 0; y < SCREEN_HEIGHT; y++) {
+        for (int y = 0; y < GAME_SCREEN_HEIGHT; y++) {
             if (y % BLOCK_SIZE == 0) colorIndex += 10;
-            for (int x = 0; x < SCREEN_WIDTH; x++) {
-                pixels[x + y * SCREEN_WIDTH] = colorSquares[colorIndex];
+            for (int x = 0; x < GAME_SCREEN_WIDTH; x++) {
+                pixels[x + y * GAME_SCREEN_WIDTH] = colorSquares[colorIndex];
                 if (colorIndex < colorSquares.length && x % BLOCK_SIZE == 0) {
                     colorIndex++;
                 }
             }
             colorIndex = 0;
         }
-    }
-
-    private void debugMouseListener() {
-        canvas.addMouseListener(new MouseInputAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println(e.getX() / BLOCK_SIZE + 1 + ":" + (e.getY() / BLOCK_SIZE + 1) + ", shapes on board:" + shapesOnBoard.size());
-                /*for (int i = 0; i < bricksMap.size(); )
-                    System.out.print(bricksMap.get(i) + (++i % GRID_WIDTH == 0 ? "\n" : ", "));*/
-            }
-        });
     }
 
     public static boolean bricksCollide() {

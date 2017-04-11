@@ -20,17 +20,18 @@ public class Block {
         this.image = image;
     }
 
-    public void render(Graphics g) {
-        g.drawImage(image, getGlobX() * Game.BLOCK_SIZE, getGlobY() * Game.BLOCK_SIZE, null);
+    public void render(Graphics g, boolean isCurrent) {
+        g.drawImage(image,
+                isCurrent ? globX * Game.BLOCK_SIZE : Game.GAME_SCREEN_WIDTH + (relX + (parent.getBlockPattern() <= 4 ? 1 : 2)) * Game.BLOCK_SIZE + (parent.getBlockPattern() == 1 ? 40 : 20),
+                globY * Game.BLOCK_SIZE + (isCurrent ? 0 : 60),
+                null);
     }
 
     public void relocate(int dx1, int dy1, int dx2, int dy2) {
-        setGlobX(getGlobX() + dx1 + dx2);
-        setGlobY(getGlobY() + dy1 + dy2);
-        int newRelX = getRelX() + dx1 + dx2;
-        int newRelY = getRelY() + dy1 + dy2;
-        setRelX(newRelX);
-        setRelY(newRelY);
+        globX += dx1 + dx2;
+        globY += dy1 + dy2;
+        relX += dx1 + dx2;
+        relY += dy1 + dy2;
     }
 
     //Getters and Setters
@@ -51,10 +52,6 @@ public class Block {
         this.globY = globY;
     }
 
-    public Shape getParent() {
-        return parent;
-    }
-
     public void setParent(Shape parent) {
         this.parent = parent;
     }
@@ -65,13 +62,5 @@ public class Block {
 
     public int getRelX() {
         return relX;
-    }
-
-    public void setRelY(int relY) {
-        this.relY = relY;
-    }
-
-    public void setRelX(int relX) {
-        this.relX = relX;
     }
 }
