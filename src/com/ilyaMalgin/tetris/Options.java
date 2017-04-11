@@ -5,9 +5,9 @@ public class Options {
     private static int speed;
     private static int columns = 14;
     private static int rows = 8;
-    private static boolean showNext = true;
+    private static boolean showNext = true, speedIncrease = false;
 
-    public static double getSpeed() {
+    public static int getSpeed() {
         return speed;
     }
 
@@ -37,5 +37,13 @@ public class Options {
 
     public static boolean getShowNext() {
         return showNext;
+    }
+
+    public static boolean isSpeedIncrease() {
+        return speedIncrease;
+    }
+
+    public static void setSpeedIncrease(boolean speedIncrease) {
+        Options.speedIncrease = speedIncrease;
     }
 }

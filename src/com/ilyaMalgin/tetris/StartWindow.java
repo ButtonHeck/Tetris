@@ -11,7 +11,7 @@ public class StartWindow extends JFrame {
     private JLabel nameLabel, columnsLabel, authorLabel, speedLabel, rowsLabel;
     private JSlider speedSlider;
     private JTextArea controlsText;
-    private JCheckBox showNextCB;
+    private JCheckBox showNextCB, speedIncreaseCB;
 
     public StartWindow() {
         initComponents();
@@ -29,8 +29,9 @@ public class StartWindow extends JFrame {
         speedSlider = new JSlider();
         controlsText = new JTextArea();
         showNextCB = new JCheckBox();
+        speedIncreaseCB = new JCheckBox();
 
-        nameLabel.setText("Tetris v0.76");
+        nameLabel.setText("Tetris v0.77");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -55,7 +56,7 @@ public class StartWindow extends JFrame {
 
         speedSlider.setMajorTickSpacing(5);
         speedSlider.setMaximum(40);
-        speedSlider.setMinimum(10);
+        speedSlider.setMinimum(15);
         speedSlider.setMinorTickSpacing(1);
         speedSlider.setPaintTicks(true);
         speedSlider.setSnapToTicks(true);
@@ -75,6 +76,10 @@ public class StartWindow extends JFrame {
         showNextCB.addActionListener(this::setShowNext);
         showNextCB.setSelected(true);
 
+        speedIncreaseCB.setSelected(true);
+        speedIncreaseCB.addActionListener(this::setSpeedIncrease);
+        speedIncreaseCB.setText("Increase speed");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -89,6 +94,9 @@ public class StartWindow extends JFrame {
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addContainerGap()
                                                                 .addComponent(nameLabel))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                .addContainerGap()
+                                                                .addComponent(speedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(102, 102, 102)
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,11 +111,10 @@ public class StartWindow extends JFrame {
                                                                                         .addComponent(rowsComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                                         .addComponent(rowsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                                                         .addGroup(layout.createSequentialGroup()
-                                                                                .addComponent(showNextCB)
-                                                                                .addGap(0, 0, Short.MAX_VALUE))))
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                .addContainerGap()
-                                                                .addComponent(speedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(speedIncreaseCB)
+                                                                                        .addComponent(showNextCB))
+                                                                                .addGap(0, 0, Short.MAX_VALUE)))))
                                                 .addGap(81, 81, 81))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addContainerGap()
@@ -135,9 +142,11 @@ public class StartWindow extends JFrame {
                                         .addComponent(rowsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(showNextCB)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(speedIncreaseCB)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                                 .addComponent(controlsText, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(authorLabel)
                                 .addContainerGap())
         );
@@ -145,6 +154,10 @@ public class StartWindow extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
+    }
+
+    private void setSpeedIncrease(ActionEvent actionEvent) {
+        Options.setSpeedIncrease(speedIncreaseCB.isSelected());
     }
 
     private void setShowNext(ActionEvent actionEvent) {
@@ -166,6 +179,7 @@ public class StartWindow extends JFrame {
 
     private void startButtonPressed(ActionEvent evt) {
         setVisible(false);
+        Options.setSpeed(speedSlider.getValue());
         new Game(this);
     }
 

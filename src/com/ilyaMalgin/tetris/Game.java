@@ -2,9 +2,7 @@ package com.ilyaMalgin.tetris;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -17,7 +15,7 @@ public class Game extends JFrame implements Runnable {
     public static int GRID_HEIGHT, GRID_WIDTH, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT;
 
     private volatile boolean running;
-    private boolean firstUpdateHappen, boardColorChanged, paused, showNext;
+    private boolean firstUpdateHappen, boardColorChanged, paused;
     private StartWindow startWindow;
     private Thread gameThread;
     private BufferStrategy bs;
@@ -25,8 +23,9 @@ public class Game extends JFrame implements Runnable {
     private int[] pixels;
     private BufferedImage boardImage;
     private Canvas canvas;
-    private int boardColor = 0xFF889999, score = 0;
-    private JLabel scoreLabel = new JLabel("Speed: " + (int) Options.getSpeed() + ", Score: " + 0);
+    private int boardColor = 0xFF889999, score = 0, nextSpeedIncreaseScore = 10;
+    private JLabel scoreLabel = new JLabel("Speed: " + Options.getSpeed() + ", Score: " + 0);
+    private double timePerUpdate;
 
     //logic stuff
     private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
@@ -56,10 +55,9 @@ public class Game extends JFrame implements Runnable {
 
     private void initializeCanvasParameters() {
         canvas = new Canvas();
-        showNext = Options.getShowNext();
-        canvas.setPreferredSize(new Dimension(GAME_SCREEN_WIDTH + (showNext ? 200 : 0), GAME_SCREEN_HEIGHT));
-        canvas.setMaximumSize(new Dimension(GAME_SCREEN_WIDTH + (showNext ? 200 : 0), GAME_SCREEN_HEIGHT));
-        canvas.setMinimumSize(new Dimension(GAME_SCREEN_WIDTH + (showNext ? 200 : 0), GAME_SCREEN_HEIGHT));
+        canvas.setPreferredSize(new Dimension(GAME_SCREEN_WIDTH + (Options.getShowNext() ? 200 : 0), GAME_SCREEN_HEIGHT));
+        canvas.setMaximumSize(new Dimension(GAME_SCREEN_WIDTH + (Options.getShowNext() ? 200 : 0), GAME_SCREEN_HEIGHT));
+        canvas.setMinimumSize(new Dimension(GAME_SCREEN_WIDTH + (Options.getShowNext() ? 200 : 0), GAME_SCREEN_HEIGHT));
         add(canvas);
     }
 
@@ -130,7 +128,7 @@ public class Game extends JFrame implements Runnable {
         final double updatesPerSecond = Options.getSpeed() / 12;
         long lastUpdateTime = System.nanoTime(), nowTime;
         double delta = 0;
-        double timePerUpdate = 1_000_000_000 / updatesPerSecond;
+        timePerUpdate = 1_000_000_000 / updatesPerSecond;
         while (running) {
             if (!firstUpdateHappen) {
                 renderBeforeFirstUpdate();
@@ -232,7 +230,15 @@ public class Game extends JFrame implements Runnable {
 
     private void renewScore(int adjacentFullRows) {
         score += adjacentFullRows * adjacentFullRows;
-        scoreLabel.setText("Speed: " + (int) Options.getSpeed() + ", Score: " + score + (paused ? " (paused)" : ""));
+        if (Options.isSpeedIncrease() && score >= nextSpeedIncreaseScore)
+            blockFallSpeedIncrease();
+        scoreLabel.setText("Speed: " + Options.getSpeed() + ", Score: " + score + (paused ? " (paused)" : ""));
+    }
+
+    private void blockFallSpeedIncrease() {
+        nextSpeedIncreaseScore += 10;
+        Options.setSpeed(Options.getSpeed() + 1);
+        timePerUpdate = 1_000_000_000 / (Options.getSpeed() / 12);
     }
 
     public void update() {
@@ -269,7 +275,7 @@ public class Game extends JFrame implements Runnable {
             createBoardImageData(boardColor);
             boardColorChanged = false;
         }
-        if (showNext)
+        if (Options.getShowNext())
             renderSideParts();
         bs.show();
         g.dispose();

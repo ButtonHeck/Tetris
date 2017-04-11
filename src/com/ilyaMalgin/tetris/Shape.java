@@ -14,29 +14,30 @@ public class Shape {
     private final boolean rotatable;
     private volatile boolean moveEnded = false;
     private final int blockPattern;
-    private final BufferedImage image;
+    private final BufferedImage[] images;
+    private static int imageSeed = 0;
 
-    private static final Shape L_SHAPE = new Shape(true, 0, BlockSheet.L_SHAPE_IMAGE);
-    private static final Shape T_SHAPE = new Shape(true, 1, BlockSheet.T_SHAPE_IMAGE);
-    private static final Shape I_SHAPE = new Shape(true, 2, BlockSheet.I_SHAPE_IMAGE);
-    private static final Shape CUBE_SHAPE = new Shape(false, 3, BlockSheet.CUBE_SHAPE_IMAGE);
-    private static final Shape Z_SHAPE = new Shape(true, 4, BlockSheet.Z_SHAPE_IMAGE);
-    private static final Shape L_MIRROR_SHAPE = new Shape(true, 5, BlockSheet.L_SHAPE_IMAGE);
-    private static final Shape Z_MIRROR_SHAPE = new Shape(true, 6, BlockSheet.Z_SHAPE_IMAGE);
+    private static final Shape L_SHAPE = new Shape(true, 0, BlockSheet.L_SHAPE_IMAGES);
+    private static final Shape T_SHAPE = new Shape(true, 1, BlockSheet.T_SHAPE_IMAGES);
+    private static final Shape I_SHAPE = new Shape(true, 2, BlockSheet.I_SHAPE_IMAGES);
+    private static final Shape CUBE_SHAPE = new Shape(false, 3, BlockSheet.CUBE_SHAPE_IMAGES);
+    private static final Shape Z_SHAPE = new Shape(true, 4, BlockSheet.Z_SHAPE_IMAGES);
+    private static final Shape L_MIRROR_SHAPE = new Shape(true, 5, BlockSheet.L_SHAPE_IMAGES);
+    private static final Shape Z_MIRROR_SHAPE = new Shape(true, 6, BlockSheet.Z_SHAPE_IMAGES);
 
     private static final Shape[] shapes = new Shape[]{L_SHAPE, T_SHAPE, I_SHAPE, CUBE_SHAPE, Z_SHAPE, L_MIRROR_SHAPE, Z_MIRROR_SHAPE};
 
-    private Shape(boolean rotatable, int blockPattern, BufferedImage image) {
+    private Shape(boolean rotatable, int blockPattern, BufferedImage[] images) {
         this.x = blockPattern <= 4 ? spawnX : spawnX + 1;
         this.y = 1;
         this.blocks = new ArrayList<>();
         this.rotatable = rotatable;
         this.blockPattern = blockPattern;
-        this.image = image;
+        this.images = images;
         Collections.addAll(blocks, BlockPatterns.getBlocks(blockPattern));
         blocks.forEach(e -> {
             e.setParent(this);
-            e.setBlockImage(image);
+            e.setBlockImage(images[++imageSeed % 3]);
             e.setGlobX(e.getGlobX() + this.x);
             e.setGlobY(e.getGlobY() + this.y);
         });
@@ -149,7 +150,7 @@ public class Shape {
     }
 
     public Shape copy() {
-        return new Shape(this.rotatable, this.blockPattern, this.image);
+        return new Shape(this.rotatable, this.blockPattern, this.images);
     }
 
     public static Shape getRandomShape() {
