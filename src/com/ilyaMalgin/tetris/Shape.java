@@ -136,11 +136,9 @@ public class Shape {
     }
 
     public void placeOnMap(ArrayList<Integer> map) {
-        synchronized (blocks) {
-            blocks.forEach(block ->
-                    map.set(block.getGlobY() * Game.GRID_WIDTH + block.getGlobX(),
-                            map.get(block.getGlobY() * Game.GRID_WIDTH + block.getGlobX()) + 1));
-        }
+        blocks.forEach(block ->
+                map.set(block.getGlobY() * Game.GRID_WIDTH + block.getGlobX(),
+                        map.get(block.getGlobY() * Game.GRID_WIDTH + block.getGlobX()) + 1));
     }
 
     public void render(Graphics g, boolean isCurrent) {

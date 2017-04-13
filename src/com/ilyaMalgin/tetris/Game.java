@@ -140,12 +140,8 @@ public class Game extends JFrame implements Runnable {
                 if (!paused)
                     update();
                 render();
-                if (!currentShape.moveEnded() && !paused) {
-                    if (running)
-                        currentShape.tryMove(0, 1);
-                    else
-                        dispose();
-                }
+                if (running && !currentShape.moveEnded() && !paused)
+                    currentShape.tryMove(0, 1);
                 delta = 0;
                 firstUpdateHappen = true;
             }
@@ -316,8 +312,6 @@ public class Game extends JFrame implements Runnable {
 
     public static void renewBricksMap() {
         Collections.fill(bricksMap, 0);
-        synchronized (bricksMap) {
-            shapesOnBoard.forEach(shape -> shape.placeOnMap(bricksMap));
-        }
+        shapesOnBoard.forEach(shape -> shape.placeOnMap(bricksMap));
     }
 }

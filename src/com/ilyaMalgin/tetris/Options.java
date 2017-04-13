@@ -5,7 +5,7 @@ public class Options {
     private static int speed;
     private static int columns = 14;
     private static int rows = 8;
-    private static boolean showNext = true, speedIncrease = false;
+    private static boolean showNext, speedIncrease;
 
     public static int getSpeed() {
         return speed;

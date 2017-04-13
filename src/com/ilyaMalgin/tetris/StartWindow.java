@@ -31,7 +31,7 @@ public class StartWindow extends JFrame {
         showNextCB = new JCheckBox();
         speedIncreaseCB = new JCheckBox();
 
-        nameLabel.setText("Tetris v0.77");
+        nameLabel.setText("Tetris v0.78");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -73,11 +73,11 @@ public class StartWindow extends JFrame {
         controlsText.setText("A/D - move left/right\nW/S - rotate clockwise/counterclockwise\nP - pause\nSPACE - drop current figure\n\nHave a nice play :)\n");
 
         showNextCB.setText("Show next shape");
-        showNextCB.addActionListener(this::setShowNext);
+        showNextCB.addChangeListener(this::setShowNext);
         showNextCB.setSelected(true);
 
+        speedIncreaseCB.addChangeListener(this::setSpeedIncrease);
         speedIncreaseCB.setSelected(true);
-        speedIncreaseCB.addActionListener(this::setSpeedIncrease);
         speedIncreaseCB.setText("Increase speed");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -156,11 +156,11 @@ public class StartWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void setSpeedIncrease(ActionEvent actionEvent) {
+    private void setSpeedIncrease(ChangeEvent actionEvent) {
         Options.setSpeedIncrease(speedIncreaseCB.isSelected());
     }
 
-    private void setShowNext(ActionEvent actionEvent) {
+    private void setShowNext(ChangeEvent actionEvent) {
         Options.setShowNext(showNextCB.isSelected());
     }
 
