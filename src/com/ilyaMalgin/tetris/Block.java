@@ -22,7 +22,7 @@ public class Block {
 
     public void render(Graphics g, boolean isCurrent) {
         g.drawImage(image,
-                isCurrent ? globX * Game.BLOCK_SIZE : Game.GAME_SCREEN_WIDTH + (relX + (parent.getBlockPattern() <= 4 ? 1 : 2)) * Game.BLOCK_SIZE + (parent.getBlockPattern() == 1 ? 40 : 20),
+                isCurrent ? globX * Game.BLOCK_SIZE : Game.GAME_SCREEN_WIDTH + (relX + (parent.getBlockPattern() <= 4 ? 1 : 2)) * Game.BLOCK_SIZE + (parent.getBlockPattern() == 1 ? 30 : 10),
                 globY * Game.BLOCK_SIZE + (isCurrent ? 0 : 60),
                 null);
     }

@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class Game extends JFrame implements Runnable {
     //Application stuff
@@ -24,8 +25,9 @@ public class Game extends JFrame implements Runnable {
     private BufferedImage boardImage;
     private Canvas canvas;
     private int boardColor = 0xFF889999, score = 0, nextSpeedIncreaseScore = 10;
-    private JLabel scoreLabel = new JLabel("Speed: " + Options.getSpeed() + ", Score: " + 0);
+    private JLabel messageLabel = new JLabel(Messages.START);
     private double timePerUpdate;
+    private Random messageRandomizer = new Random(System.currentTimeMillis());
 
     //logic stuff
     private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
@@ -55,9 +57,9 @@ public class Game extends JFrame implements Runnable {
 
     private void initializeCanvasParameters() {
         canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(GAME_SCREEN_WIDTH + (Options.getShowNext() ? 200 : 0), GAME_SCREEN_HEIGHT));
-        canvas.setMaximumSize(new Dimension(GAME_SCREEN_WIDTH + (Options.getShowNext() ? 200 : 0), GAME_SCREEN_HEIGHT));
-        canvas.setMinimumSize(new Dimension(GAME_SCREEN_WIDTH + (Options.getShowNext() ? 200 : 0), GAME_SCREEN_HEIGHT));
+        canvas.setPreferredSize(new Dimension(GAME_SCREEN_WIDTH + 180, GAME_SCREEN_HEIGHT));
+        canvas.setMaximumSize(new Dimension(GAME_SCREEN_WIDTH + 180, GAME_SCREEN_HEIGHT));
+        canvas.setMinimumSize(new Dimension(GAME_SCREEN_WIDTH + 180, GAME_SCREEN_HEIGHT));
         add(canvas);
     }
 
@@ -78,13 +80,13 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void setupLayoutAndScore() {
-        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        add(scoreLabel);
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        add(messageLabel);
         BorderLayout layout = new BorderLayout(0, 0);
-        scoreLabel.setBorder(new MatteBorder(2, 1, 1, 1, Color.BLACK));
-        scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        messageLabel.setBorder(new MatteBorder(2, 1, 1, 1, Color.BLACK));
+        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         layout.addLayoutComponent(canvas, BorderLayout.NORTH);
-        layout.addLayoutComponent(scoreLabel, BorderLayout.SOUTH);
+        layout.addLayoutComponent(messageLabel, BorderLayout.SOUTH);
         setLayout(layout);
     }
 
@@ -214,6 +216,24 @@ public class Game extends JFrame implements Runnable {
             createBoardImageData(boardColor);
             removeFullLines(firstFullRow, adjacentFullRows);
             renewScore(adjacentFullRows);
+            renewMessage(adjacentFullRows);
+        }
+    }
+
+    private void renewMessage(int adjacentFullRows) {
+        switch (adjacentFullRows) {
+            case 1:
+                messageLabel.setText(Messages.L1[messageRandomizer.nextInt(Messages.L1.length)]);
+                break;
+            case 2:
+                messageLabel.setText(Messages.L2[messageRandomizer.nextInt(Messages.L2.length)]);
+                break;
+            case 3:
+                messageLabel.setText(Messages.L3[messageRandomizer.nextInt(Messages.L3.length)]);
+                break;
+            case 4:
+                messageLabel.setText(Messages.L4[messageRandomizer.nextInt(Messages.L4.length)]);
+                break;
         }
     }
 
@@ -228,7 +248,6 @@ public class Game extends JFrame implements Runnable {
         score += adjacentFullRows * adjacentFullRows;
         if (Options.isSpeedIncrease() && score >= nextSpeedIncreaseScore)
             blockFallSpeedIncrease();
-        scoreLabel.setText("Speed: " + Options.getSpeed() + ", Score: " + score + (paused ? " (paused)" : ""));
     }
 
     private void blockFallSpeedIncrease() {
@@ -271,18 +290,21 @@ public class Game extends JFrame implements Runnable {
             createBoardImageData(boardColor);
             boardColorChanged = false;
         }
-        if (Options.getShowNext())
-            renderSideParts();
+        renderSideParts();
         bs.show();
         g.dispose();
     }
 
     private void renderSideParts() {
-        g.clearRect(GAME_SCREEN_WIDTH, 0, 200, GAME_SCREEN_HEIGHT);
-        nextShape.render(g, false);
-        g.drawLine(GAME_SCREEN_WIDTH, 0, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
-        g.setFont(new Font("Arial", Font.PLAIN, 18));
-        g.drawString("Next:", GAME_SCREEN_WIDTH + 70, 40);
+        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        if (Options.getShowNext()) {
+            g.clearRect(GAME_SCREEN_WIDTH, 0, 200, GAME_SCREEN_HEIGHT);
+            nextShape.render(g, false);
+            g.drawLine(GAME_SCREEN_WIDTH, 0, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
+            g.drawString("Next:", GAME_SCREEN_WIDTH + 60, 40);
+        }
+        g.drawString("Score " + score, GAME_SCREEN_WIDTH + 10, 240);
+        g.drawString("Speed: " + Options.getSpeed(), GAME_SCREEN_WIDTH + 10, 270);
     }
 
     private void createBoardImageData(int boardColor) {

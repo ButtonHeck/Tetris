@@ -1,8 +1,14 @@
 package com.ilyaMalgin.tetris;
 
+import org.lwjgl.openal.AL;
+import org.newdawn.slick.Music;
+import org.newdawn.slick.SlickException;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class StartWindow extends JFrame {
 
@@ -12,6 +18,7 @@ public class StartWindow extends JFrame {
     private JSlider speedSlider;
     private JTextArea controlsText;
     private JCheckBox showNextCB, speedIncreaseCB;
+    private Music music;
 
     public StartWindow() {
         initComponents();
@@ -31,7 +38,14 @@ public class StartWindow extends JFrame {
         showNextCB = new JCheckBox();
         speedIncreaseCB = new JCheckBox();
 
-        nameLabel.setText("Tetris v0.78");
+        try {
+            music = new Music("res/audio/music.wav");
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+        music.loop();
+
+        nameLabel.setText("Tetris v0.8");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -151,7 +165,14 @@ public class StartWindow extends JFrame {
                                 .addContainerGap())
         );
         pack();
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                music.stop();
+                AL.destroy();
+                System.exit(0);
+            }
+        });
         setResizable(false);
         setLocationRelativeTo(null);
     }
@@ -181,6 +202,7 @@ public class StartWindow extends JFrame {
         setVisible(false);
         Options.setSpeed(speedSlider.getValue());
         new Game(this);
+        music.setVolume(1.0f);
     }
 
     public static void main(String args[]) {
