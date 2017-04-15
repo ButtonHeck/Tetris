@@ -18,7 +18,7 @@ public abstract class Messages {
     TWO_LINES1 = "not bad, keep going",
             TWO_LINES2 = "hmm, good move",
             TWO_LINES3 = "I knew you could do this",
-            TWO_LINES4 = "they would both be drawn to Koonut-Kaliffee",
+            TWO_LINES4 = "one is good, but two is better. isn't it?",
             TWO_LINES5 = "knockout!",
             TWO_LINES6 = "PIZZA-PIZZA PIE!",
             TWO_LINES7 = "Double kill!",
@@ -26,14 +26,14 @@ public abstract class Messages {
     THREE_LINES1 = "wow, you impressed me!",
             THREE_LINES2 = "that was awesome! (really)",
             THREE_LINES3 = "these three knew more than expected...",
-            THREE_LINES4 = "sexy triple you hooked",
+            THREE_LINES4 = "sexy triple you made",
             THREE_LINES5 = "Tetris level: Pro",
             THREE_LINES6 = "now let's get all four!",
 
     FOUR_LINES1 = "Ohhh, I'm wet now...",
             FOUR_LINES2 = "I want a baby from you!",
             FOUR_LINES3 = "Tetris level: GOD!",
-            FOUR_LINES4 = "it could not be better than you've done",
+            FOUR_LINES4 = "superhot!",
             FOUR_LINES5 = "keep rocking!",
             FOUR_LINES6 = "Yes, yes, yeeeees...!";
 

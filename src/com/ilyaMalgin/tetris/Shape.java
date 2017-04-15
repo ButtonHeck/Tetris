@@ -43,9 +43,12 @@ public class Shape {
         });
     }
 
-    public void tryMove(int x, int y) {
-        if (movementPossible(x, y))
+    public boolean tryMove(int x, int y) {
+        if (movementPossible(x, y)) {
             move(x, y);
+            return true;
+        } else
+            return false;
     }
 
     private boolean movementPossible(int x, int y) {
@@ -83,6 +86,7 @@ public class Shape {
         while (!Game.bricksCollide() && !lowBorderReached(1) && !moveEnded) {
             move(0, 1);
         }
+        AudioHolder.drop();
     }
 
     public void detach(int y) {
@@ -120,7 +124,9 @@ public class Shape {
                 int dy2 = left ? -block.getRelX() : block.getRelX();
                 block.relocate(dx1, dy1, dx2, dy2);
             });
+            return;
         }
+        AudioHolder.rotate();
     }
 
     private boolean impossibleToRotate(Block block, boolean left) {

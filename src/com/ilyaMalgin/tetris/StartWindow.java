@@ -1,24 +1,26 @@
 package com.ilyaMalgin.tetris;
 
 import org.lwjgl.openal.AL;
-import org.newdawn.slick.Music;
-import org.newdawn.slick.SlickException;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class StartWindow extends JFrame {
 
-    private JButton startButton;
+    private JButton startButton, hiScoreResetButton;
     private JComboBox<Integer> columnsComboBox, rowsComboBox;
-    private JLabel nameLabel, columnsLabel, authorLabel, speedLabel, rowsLabel;
+    private JLabel nameLabel, columnsLabel, authorLabel, speedLabel, rowsLabel, hiScoreLabel;
     private JSlider speedSlider;
     private JTextArea controlsText;
-    private JCheckBox showNextCB, speedIncreaseCB;
-    private Music music;
+    private JCheckBox showNextCB, speedIncreaseCB, messagesCB;
+    private JToggleButton musicTB, soundsTB;
 
     public StartWindow() {
         initComponents();
@@ -27,25 +29,23 @@ public class StartWindow extends JFrame {
     private void initComponents() {
         nameLabel = new JLabel();
         startButton = new JButton();
+        hiScoreResetButton = new JButton();
         columnsComboBox = new JComboBox<>();
         rowsComboBox = new JComboBox<>();
         speedLabel = new JLabel();
         columnsLabel = new JLabel();
         rowsLabel = new JLabel();
         authorLabel = new JLabel();
+        hiScoreLabel = new JLabel();
         speedSlider = new JSlider();
         controlsText = new JTextArea();
         showNextCB = new JCheckBox();
         speedIncreaseCB = new JCheckBox();
+        messagesCB = new JCheckBox();
+        musicTB = new JToggleButton();
+        soundsTB = new JToggleButton();
 
-        try {
-            music = new Music("res/audio/music.wav");
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
-        music.loop();
-
-        nameLabel.setText("Tetris v0.8");
+        nameLabel.setText("Tetris v0.9");
 
         startButton.setText("Start Game");
         startButton.setFocusable(false);
@@ -59,10 +59,10 @@ public class StartWindow extends JFrame {
         rowsComboBox.addActionListener(this::setRows);
         rowsComboBox.getModel().setSelectedItem(8);
 
-        columnsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        columnsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         columnsLabel.setText("Columns:");
 
-        rowsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        rowsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         rowsLabel.setText("Rows:");
 
         authorLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -94,87 +94,159 @@ public class StartWindow extends JFrame {
         speedIncreaseCB.setSelected(true);
         speedIncreaseCB.setText("Increase speed");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        messagesCB.setText("Show messages");
+        messagesCB.addChangeListener(this::setShowMessages);
+        messagesCB.setSelected(true);
+
+        musicTB.setText("Music ON");
+        musicTB.setFocusable(false);
+        musicTB.addActionListener(this::musicSwitch);
+        musicTB.setSelected(true);
+
+        soundsTB.setText("Sounds ON");
+        soundsTB.setFocusable(false);
+        soundsTB.addChangeListener(this::soundsSwitch);
+        soundsTB.setSelected(true);
+
+        renewHiScore();
+
+        hiScoreResetButton.setText("Reset");
+        hiScoreResetButton.setFocusable(false);
+        hiScoreResetButton.addActionListener(this::resetHiScore);
+
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(hiScoreResetButton)
+                                                .addGap(42, 42, 42)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(startButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(speedLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGap(101, 101, 101))
+                                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(nameLabel)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(authorLabel))
+                                        .addComponent(controlsText)
+                                        .addComponent(speedSlider, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(columnsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(rowsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(rowsComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(columnsComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(speedIncreaseCB)
+                                                        .addComponent(showNextCB)
+                                                        .addComponent(messagesCB)))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addContainerGap()
-                                                                .addComponent(nameLabel))
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                .addContainerGap()
-                                                                .addComponent(speedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGap(102, 102, 102)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                                                                        .addComponent(speedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                        .addGroup(layout.createSequentialGroup()
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                                                        .addComponent(columnsComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                                        .addComponent(columnsLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                        .addComponent(rowsComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                                        .addComponent(rowsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                                                        .addGroup(layout.createSequentialGroup()
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                        .addComponent(speedIncreaseCB)
-                                                                                        .addComponent(showNextCB))
-                                                                                .addGap(0, 0, Short.MAX_VALUE)))))
-                                                .addGap(81, 81, 81))
+                                                .addComponent(musicTB, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(soundsTB, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(controlsText)))
+                                                .addComponent(hiScoreLabel)
+                                                .addGap(0, 0, Short.MAX_VALUE)))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(nameLabel)
-                                .addGap(2, 2, 2)
-                                .addComponent(startButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(hiScoreLabel)
+                                .addGap(8, 8, 8)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(startButton)
+                                        .addComponent(hiScoreResetButton))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(speedLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(speedSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(columnsLabel)
-                                        .addComponent(rowsLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(columnsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(rowsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(showNextCB)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(speedIncreaseCB)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                                .addComponent(controlsText, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(authorLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(speedSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(columnsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(columnsLabel))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(rowsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(rowsLabel))
+                                                .addGap(36, 36, 36)
+                                                .addComponent(controlsText, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(musicTB)
+                                                        .addComponent(soundsTB))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(authorLabel)
+                                                        .addComponent(nameLabel)))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(showNextCB)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(speedIncreaseCB)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(messagesCB)
+                                                .addGap(0, 0, Short.MAX_VALUE)))
                                 .addContainerGap())
         );
         pack();
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                music.stop();
+                AudioHolder.music.stop();
                 AL.destroy();
                 System.exit(0);
             }
         });
         setResizable(false);
         setLocationRelativeTo(null);
+        AudioHolder.music.loop();
+    }
+
+    private void resetHiScore(ActionEvent actionEvent) {
+        try (FileWriter writer = new FileWriter(new File("res/hiscore.txt"))) {
+            writer.write(String.valueOf(0));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        renewHiScore();
+    }
+
+    public void renewHiScore() {
+        try (Scanner scanner = new Scanner(new File("res/hiscore.txt"))) {
+            int hiScore = scanner.nextInt();
+            hiScoreLabel.setText("Hi-score: " + hiScore);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setShowMessages(ChangeEvent changeEvent) {
+        Options.setShowMessages(messagesCB.isSelected());
+    }
+
+    private void soundsSwitch(ChangeEvent changeEvent) {
+        boolean isOn = soundsTB.isSelected();
+        AudioHolder.setSoundsEnabled(isOn);
+        soundsTB.setText("Sounds " + (isOn ? "ON" : "OFF"));
+    }
+
+    private void musicSwitch(ActionEvent actionEvent) {
+        boolean isOn = musicTB.isSelected();
+        musicTB.setText("Music " + (isOn ? "ON" : "OFF"));
+        if (isOn)
+            AudioHolder.music.play();
+        else
+            AudioHolder.music.stop();
     }
 
     private void setSpeedIncrease(ChangeEvent actionEvent) {
@@ -201,8 +273,8 @@ public class StartWindow extends JFrame {
     private void startButtonPressed(ActionEvent evt) {
         setVisible(false);
         Options.setSpeed(speedSlider.getValue());
+        AudioHolder.buttonClick();
         new Game(this);
-        music.setVolume(1.0f);
     }
 
     public static void main(String args[]) {

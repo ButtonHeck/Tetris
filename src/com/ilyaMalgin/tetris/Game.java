@@ -6,6 +6,9 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -28,6 +31,7 @@ public class Game extends JFrame implements Runnable {
     private JLabel messageLabel = new JLabel(Messages.START);
     private double timePerUpdate;
     private Random messageRandomizer = new Random(System.currentTimeMillis());
+    private int hiScore = 0;
 
     //logic stuff
     private static final ArrayList<Integer> bricksMap = new ArrayList<>(GRID_HEIGHT * GRID_WIDTH);
@@ -41,7 +45,8 @@ public class Game extends JFrame implements Runnable {
         initializeCanvasParameters();
         initializeGraphicsData();
         initializeLogicMaps();
-        setupLayoutAndScore();
+        if (Options.isShowMessages())
+            setupLayoutAndScore();
         allocateGameOnScreen();
         initializeInputListeners();
         gameThread = new Thread(this, "Game window thread");
@@ -155,6 +160,7 @@ public class Game extends JFrame implements Runnable {
                 e.printStackTrace();
             }
         }
+        setNewHiScore(score);
         dispose();
     }
 
@@ -177,6 +183,7 @@ public class Game extends JFrame implements Runnable {
             stop();
         if (keyboardController.pausePressed()) {
             paused = !paused;
+            AudioHolder.music.setVolume(paused ? 0.4f : 1.0f);
             createBoardImageData(paused ? 0x333333 : boardColor);
             renewScore(0);
             if (running)
@@ -185,9 +192,11 @@ public class Game extends JFrame implements Runnable {
         if (currentShape.moveEnded() || !running || paused)
             return;
         if (keyboardController.rightPressed())
-            currentShape.tryMove(1, 0);
+            if (currentShape.tryMove(1, 0))
+                AudioHolder.move();
         if (keyboardController.leftPressed())
-            currentShape.tryMove(-1, 0);
+            if (currentShape.tryMove(-1, 0))
+                AudioHolder.move();
         if (keyboardController.rotateLPressed())
             currentShape.rotate(true);
         if (keyboardController.rotateRPressed())
@@ -212,28 +221,11 @@ public class Game extends JFrame implements Runnable {
         }
         if (adjacentFullRows != 0) {
             boardColorChanged = true;
-            boardColor += adjacentFullRows * 0xFF080808;
+            boardColor += adjacentFullRows * 0xFF0F0F0F;
             createBoardImageData(boardColor);
             removeFullLines(firstFullRow, adjacentFullRows);
             renewScore(adjacentFullRows);
-            renewMessage(adjacentFullRows);
-        }
-    }
-
-    private void renewMessage(int adjacentFullRows) {
-        switch (adjacentFullRows) {
-            case 1:
-                messageLabel.setText(Messages.L1[messageRandomizer.nextInt(Messages.L1.length)]);
-                break;
-            case 2:
-                messageLabel.setText(Messages.L2[messageRandomizer.nextInt(Messages.L2.length)]);
-                break;
-            case 3:
-                messageLabel.setText(Messages.L3[messageRandomizer.nextInt(Messages.L3.length)]);
-                break;
-            case 4:
-                messageLabel.setText(Messages.L4[messageRandomizer.nextInt(Messages.L4.length)]);
-                break;
+            feedbackToPlayer(adjacentFullRows);
         }
     }
 
@@ -248,6 +240,26 @@ public class Game extends JFrame implements Runnable {
         score += adjacentFullRows * adjacentFullRows;
         if (Options.isSpeedIncrease() && score >= nextSpeedIncreaseScore)
             blockFallSpeedIncrease();
+    }
+
+    private void feedbackToPlayer(int adjacentFullRows) {
+        if (Options.isShowMessages()) {
+            switch (adjacentFullRows) {
+                case 1:
+                    messageLabel.setText(Messages.L1[messageRandomizer.nextInt(Messages.L1.length)]);
+                    break;
+                case 2:
+                    messageLabel.setText(Messages.L2[messageRandomizer.nextInt(Messages.L2.length)]);
+                    break;
+                case 3:
+                    messageLabel.setText(Messages.L3[messageRandomizer.nextInt(Messages.L3.length)]);
+                    break;
+                case 4:
+                    messageLabel.setText(Messages.L4[messageRandomizer.nextInt(Messages.L4.length)]);
+                    break;
+            }
+        }
+        AudioHolder.line(adjacentFullRows);
     }
 
     private void blockFallSpeedIncrease() {
@@ -335,5 +347,14 @@ public class Game extends JFrame implements Runnable {
     public static void renewBricksMap() {
         Collections.fill(bricksMap, 0);
         shapesOnBoard.forEach(shape -> shape.placeOnMap(bricksMap));
+    }
+
+    private void setNewHiScore(int score) {
+        try (FileWriter writer = new FileWriter(new File("res/hiscore.txt"))) {
+            writer.write(String.valueOf(score));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        startWindow.renewHiScore();
     }
 }
