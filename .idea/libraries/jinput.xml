@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="jinput">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Документы/Пакеты и программы/Libs/jars/jinput.jar!/" />
-      <root url="jar://$USER_HOME$/Документы/Пакеты и программы/Libs/jars/jogg-0.0.7.jar!/" />
-      <root url="jar://$USER_HOME$/Документы/Пакеты и программы/Libs/jars/jorbis-0.0.15.jar!/" />
-      <root url="jar://$USER_HOME$/Документы/Пакеты и программы/Libs/jars/lwjgl.jar!/" />
-      <root url="jar://$USER_HOME$/Документы/Пакеты и программы/Libs/jars/slick.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jars/jinput.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jars/jogg-0.0.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jars/jorbis-0.0.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jars/lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jars/slick.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

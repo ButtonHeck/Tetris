@@ -2,14 +2,17 @@ package com.ilyaMalgin.tetris;
 
 import org.lwjgl.openal.AL;
 
+import javax.lang.model.element.UnknownElementException;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Scanner;
 
 public class StartWindow extends JFrame {
@@ -45,9 +48,11 @@ public class StartWindow extends JFrame {
         musicTB = new JToggleButton();
         soundsTB = new JToggleButton();
 
-        nameLabel.setText("Tetris v0.9");
+        nameLabel.setText("Tetris v1.0");
+        nameLabel.setForeground(Color.DARK_GRAY);
 
         startButton.setText("Start Game");
+        startButton.setFont(new Font("Arial", Font.BOLD, 14));
         startButton.setFocusable(false);
         startButton.addActionListener(this::startButtonPressed);
 
@@ -67,6 +72,7 @@ public class StartWindow extends JFrame {
 
         authorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         authorLabel.setText("Made by Ilya Malgin, 2017");
+        authorLabel.setForeground(Color.DARK_GRAY);
 
         speedSlider.setMajorTickSpacing(5);
         speedSlider.setMaximum(40);
@@ -84,7 +90,7 @@ public class StartWindow extends JFrame {
         controlsText.setEditable(false);
         controlsText.setColumns(20);
         controlsText.setRows(5);
-        controlsText.setText("A/D - move left/right\nW/S - rotate clockwise/counterclockwise\nP - pause\nSPACE - drop current figure\n\nHave a nice play :)\n");
+        controlsText.setText("A/D - move left/right\nW/S - rotate\nP - pause\nSPACE - drop current figure\nESC - finish and back to menu\n\nHave a nice play :)\n");
 
         showNextCB.setText("Show next shape");
         showNextCB.addChangeListener(this::setShowNext);
@@ -148,9 +154,9 @@ public class StartWindow extends JFrame {
                                                         .addComponent(showNextCB)
                                                         .addComponent(messagesCB)))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(musicTB, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(musicTB, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(soundsTB, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(soundsTB, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(hiScoreLabel)
                                                 .addGap(0, 0, Short.MAX_VALUE)))
@@ -208,6 +214,7 @@ public class StartWindow extends JFrame {
             }
         });
         setResizable(false);
+        setTitle("Cheeky bricky: Menu");
         setLocationRelativeTo(null);
         AudioHolder.music.loop();
     }
@@ -278,6 +285,7 @@ public class StartWindow extends JFrame {
     }
 
     public static void main(String args[]) {
+        setLibraryPath();
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -289,5 +297,26 @@ public class StartWindow extends JFrame {
             java.util.logging.Logger.getLogger(StartWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         SwingUtilities.invokeLater(() -> new StartWindow().setVisible(true));
+    }
+
+    private static void setLibraryPath() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("nix") || os.contains("nux") || os.contains("aix"))
+            System.setProperty("java.library.path", "libs/native/linux");
+        else if (os.contains("win"))
+            System.setProperty("java.library.path", "libs/native/windows");
+        else if (os.contains("mac"))
+            System.setProperty("java.library.path", "libs/native/macosx");
+        else if (os.contains("sunos"))
+            System.setProperty("java.library.path", "libs/native/solaris");
+        else throw new IllegalStateException("No LWJGL natives for " + os);
+        final Field sysPathsField;
+        try {
+            sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
+            sysPathsField.setAccessible(true);
+            sysPathsField.set(null, null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

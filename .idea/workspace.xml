@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="Tetris01" />
+      <artifact name="unnamed" />
     </artifacts-to-build>
   </component>
   <component name="BookmarkManager">
@@ -10,39 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ca78910-0522-4746-9c3a-8e633ba33e7b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/buttonClick.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/drop.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/line1.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/line2.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/line3.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/line4.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/move.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/rotate.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/AudioHolder.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/audio/buttonClick.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/audio/drop.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/audio/line1.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/audio/line2.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/audio/line3.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/audio/line4.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/audio/move.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/audio/rotate.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Tetris/hiscore.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/hiscore.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/AudioHolder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/audio/music.wav" afterPath="$PROJECT_DIR$/out/production/Tetris/audio/music.wav" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/libs/native/windows/Stick Adventures.exe" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Game.class" afterPath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Game.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Messages.class" afterPath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Messages.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Options.class" afterPath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Options.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Shape.class" afterPath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Shape.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/StartWindow$1.class" afterPath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/StartWindow$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/StartWindow.class" afterPath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/StartWindow.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/audio/music.wav" afterPath="$PROJECT_DIR$/res/audio/music.wav" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jinput.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jinput.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/hiscore.txt" afterPath="$PROJECT_DIR$/out/production/Tetris/hiscore.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/hiscore.txt" afterPath="$PROJECT_DIR$/res/hiscore.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Game.java" afterPath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Game.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Messages.java" afterPath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Messages.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Options.java" afterPath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Options.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Shape.java" afterPath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Shape.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/StartWindow.java" afterPath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/StartWindow.java" />
     </list>
     <ignored path="Tetris.iws" />
@@ -67,26 +43,18 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1666">
-              <caret line="128" column="9" lean-forward="true" selection-start-line="128" selection-start-column="9" selection-end-line="128" selection-end-column="9" />
+            <state relative-caret-position="4267">
+              <caret line="294" column="37" lean-forward="false" selection-start-line="294" selection-start-column="37" selection-end-line="294" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#initializeWindowParameters#0;class#Game#0" expanded="false" />
                 <element signature="method#initializeCanvasParameters#0;class#Game#0" expanded="false" />
                 <element signature="method#initializeGraphicsData#0;class#Game#0" expanded="false" />
                 <element signature="method#initializeLogicMaps#0;class#Game#0" expanded="false" />
                 <element signature="method#setupLayoutAndScore#0;class#Game#0" expanded="false" />
+                <element signature="method#allocateGameOnScreen#0;class#Game#0" expanded="false" />
                 <element signature="method#initializeInputListeners#0;class#Game#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="hiscore.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/hiscore.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="1" lean-forward="false" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -94,10 +62,12 @@
       <file leaf-file-name="StartWindow.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/StartWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="47" column="38" lean-forward="false" selection-start-line="47" selection-start-column="38" selection-end-line="47" selection-end-column="38" />
+            <state relative-caret-position="281">
+              <caret line="301" column="35" lean-forward="true" selection-start-line="301" selection-start-column="35" selection-end-line="301" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#12267#12493#0" expanded="true" />
+                <element signature="e#12492#12493#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -110,8 +80,6 @@
               <caret line="49" column="44" lean-forward="false" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
               <folding>
                 <element signature="e#1123#1124#0" expanded="true" />
-                <element signature="e#1187#1188#0" expanded="true" />
-                <element signature="e#1238#1239#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -124,10 +92,6 @@
               <caret line="16" column="65" lean-forward="false" selection-start-line="16" selection-start-column="65" selection-end-line="16" selection-end-column="65" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1909#1910#0" expanded="true" />
-                <element signature="e#1945#1946#0" expanded="true" />
-                <element signature="e#2011#2012#0" expanded="true" />
-                <element signature="e#2068#2069#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -153,16 +117,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Shape.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Shape.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2074">
-              <caret line="128" column="28" lean-forward="false" selection-start-line="128" selection-start-column="28" selection-end-line="128" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -178,6 +132,7 @@
       <find>render</find>
       <find>paused</find>
       <find>columnsLabel</find>
+      <find>180</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -250,6 +205,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -272,37 +228,18 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tetris" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tetris" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tetris" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
+              <option name="myItemId" value="libs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Facets" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
@@ -311,16 +248,17 @@
     <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="GenerateAntBuildDialog.backupFiles" value="true" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="tetris" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Документы/Пакеты и программы/Libs/jars/slick.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="AnalyzeApkAction.lastApkPath" value="$PROJECT_DIR$" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/.idea/libraries/jinput.xml" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/libs" />
+      <recent name="$PROJECT_DIR$/res/img" />
+    </key>
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.ilyaMalgin.tetris" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/res/img" />
     </key>
   </component>
   <component name="RunManager" selected="Application.StartWindow">
@@ -332,7 +270,7 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="com.ilyaMalgin.tetris.StartWindow" />
-      <option name="VM_PARAMETERS" value="-Djava.library.path=libs/native/linux/" />
+      <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -618,24 +556,25 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="41" y="24" width="1399" height="876" extended-state="6" />
+    <frame x="41" y="24" width="1399" height="876" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37515527" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37515527" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20800571" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22087204" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -646,7 +585,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2494639" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919255" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -703,41 +641,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/awt/Window.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="3237" column="16" lean-forward="false" selection-start-line="3237" selection-start-column="16" selection-end-line="3237" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/javax/swing/BoxLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1751">
-          <caret line="138" column="13" lean-forward="false" selection-start-line="138" selection-start-column="13" selection-end-line="138" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/awt/Canvas.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="43" column="13" lean-forward="false" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/javax/swing/border/Border.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="63" column="17" lean-forward="false" selection-start-line="63" selection-start-column="17" selection-end-line="63" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/awt/BorderLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="991">
-          <caret line="420" column="16" lean-forward="false" selection-start-line="420" selection-start-column="16" selection-end-line="420" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/java/awt/image/DataBufferInt.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -807,9 +710,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="62" column="27" lean-forward="false" selection-start-line="62" selection-start-column="27" selection-end-line="62" selection-end-column="27" />
-          <folding>
-            <marker date="1491590559187" expanded="true" signature="2255:2436" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -822,7 +722,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-342">
           <caret line="98" column="28" lean-forward="false" selection-start-line="98" selection-start-column="28" selection-end-line="98" selection-end-column="28" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -837,9 +736,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
           <caret line="40" column="12" lean-forward="false" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="12" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -848,7 +744,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
           <caret line="386" column="16" lean-forward="false" selection-start-line="386" selection-start-column="16" selection-end-line="386" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -908,68 +803,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Tetris.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/compiler.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/libraries/jinput.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/Документы/Пакеты и программы/Libs/jars/slick.jar!/org/newdawn/slick/openal/WaveData.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
           <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/javax/swing/GroupLayout.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="1813" column="31" lean-forward="false" selection-start-line="1813" selection-start-column="31" selection-end-line="1813" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -998,11 +835,117 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Block.java">
+    <entry file="jar:///usr/lib/jvm/java-8-oracle/src.zip!/javax/swing/GroupLayout.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="24" column="187" lean-forward="false" selection-start-line="24" selection-start-column="187" selection-end-line="24" selection-end-column="187" />
-          <folding />
+        <state relative-caret-position="159">
+          <caret line="1813" column="31" lean-forward="false" selection-start-line="1813" selection-start-column="31" selection-end-line="1813" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tetris.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/dictionaries/ilya_malgin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/copyright/profiles_settings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/compiler.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/uiDesigner.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="14" lean-forward="true" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/hiscore.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="1" lean-forward="true" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4267">
+          <caret line="294" column="37" lean-forward="false" selection-start-line="294" selection-start-column="37" selection-end-line="294" selection-end-column="37" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#initializeWindowParameters#0;class#Game#0" expanded="false" />
+            <element signature="method#initializeCanvasParameters#0;class#Game#0" expanded="false" />
+            <element signature="method#initializeGraphicsData#0;class#Game#0" expanded="false" />
+            <element signature="method#initializeLogicMaps#0;class#Game#0" expanded="false" />
+            <element signature="method#setupLayoutAndScore#0;class#Game#0" expanded="false" />
+            <element signature="method#allocateGameOnScreen#0;class#Game#0" expanded="false" />
+            <element signature="method#initializeInputListeners#0;class#Game#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Options.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="49" column="44" lean-forward="false" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
+          <folding>
+            <element signature="e#1123#1124#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/AudioHolder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="16" column="65" lean-forward="false" selection-start-line="16" selection-start-column="65" selection-end-line="16" selection-end-column="65" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1014,29 +957,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/AudioHolder.java">
+    <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Block.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="16" column="65" lean-forward="false" selection-start-line="16" selection-start-column="65" selection-end-line="16" selection-end-column="65" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1909#1910#0" expanded="true" />
-            <element signature="e#1945#1946#0" expanded="true" />
-            <element signature="e#2011#2012#0" expanded="true" />
-            <element signature="e#2068#2069#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Options.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="49" column="44" lean-forward="false" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
-          <folding>
-            <element signature="e#1123#1124#0" expanded="true" />
-            <element signature="e#1187#1188#0" expanded="true" />
-            <element signature="e#1238#1239#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="357">
+          <caret line="24" column="187" lean-forward="false" selection-start-line="24" selection-start-column="187" selection-end-line="24" selection-end-column="187" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1048,35 +973,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/hiscore.txt">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="1" lean-forward="false" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Game.java">
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/jinput.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1666">
-          <caret line="128" column="9" lean-forward="true" selection-start-line="128" selection-start-column="9" selection-end-line="128" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#initializeCanvasParameters#0;class#Game#0" expanded="false" />
-            <element signature="method#initializeGraphicsData#0;class#Game#0" expanded="false" />
-            <element signature="method#initializeLogicMaps#0;class#Game#0" expanded="false" />
-            <element signature="method#setupLayoutAndScore#0;class#Game#0" expanded="false" />
-            <element signature="method#initializeInputListeners#0;class#Game#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/ilyaMalgin/tetris/StartWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="47" column="38" lean-forward="false" selection-start-line="47" selection-start-column="38" selection-end-line="47" selection-end-column="38" />
+        <state relative-caret-position="281">
+          <caret line="301" column="35" lean-forward="true" selection-start-line="301" selection-start-column="35" selection-end-line="301" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#12267#12493#0" expanded="true" />
+            <element signature="e#12492#12493#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1087,11 +1013,12 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>Tetris01</last-edited>
+          <last-edited>unnamed</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
