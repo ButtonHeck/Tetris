@@ -2,7 +2,6 @@ package com.ilyaMalgin.tetris;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class BlockSheet {
@@ -10,7 +9,7 @@ public class BlockSheet {
     private static BufferedImage blocksSheet;
     static {
         try {
-            blocksSheet = ImageIO.read(new File("res/img/blockSheet.png"));
+            blocksSheet = ImageIO.read(BlockSheet.class.getResource("/img/blockSheet.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

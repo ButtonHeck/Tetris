@@ -1,25 +1,21 @@
 package com.ilyaMalgin.tetris;
 
+import com.ilyaMalgin.tetris.controllers.AudioController;
+import com.ilyaMalgin.tetris.util.Options;
 import org.lwjgl.openal.AL;
 
-import javax.lang.model.element.UnknownElementException;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Scanner;
 
 public class StartWindow extends JFrame {
 
-    private JButton startButton, hiScoreResetButton;
+    private JButton startButton;
     private JComboBox<Integer> columnsComboBox, rowsComboBox;
-    private JLabel nameLabel, columnsLabel, authorLabel, speedLabel, rowsLabel, hiScoreLabel;
+    private JLabel nameLabel, columnsLabel, authorLabel, speedLabel, rowsLabel;
     private JSlider speedSlider;
     private JTextArea controlsText;
     private JCheckBox showNextCB, speedIncreaseCB, messagesCB;
@@ -32,14 +28,12 @@ public class StartWindow extends JFrame {
     private void initComponents() {
         nameLabel = new JLabel();
         startButton = new JButton();
-        hiScoreResetButton = new JButton();
         columnsComboBox = new JComboBox<>();
         rowsComboBox = new JComboBox<>();
         speedLabel = new JLabel();
         columnsLabel = new JLabel();
         rowsLabel = new JLabel();
         authorLabel = new JLabel();
-        hiScoreLabel = new JLabel();
         speedSlider = new JSlider();
         controlsText = new JTextArea();
         showNextCB = new JCheckBox();
@@ -48,7 +42,7 @@ public class StartWindow extends JFrame {
         musicTB = new JToggleButton();
         soundsTB = new JToggleButton();
 
-        nameLabel.setText("Tetris v1.0");
+        nameLabel.setText("Tetris v1.1");
         nameLabel.setForeground(Color.DARK_GRAY);
 
         startButton.setText("Start Game");
@@ -64,10 +58,10 @@ public class StartWindow extends JFrame {
         rowsComboBox.addActionListener(this::setRows);
         rowsComboBox.getModel().setSelectedItem(8);
 
-        columnsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        columnsLabel.setHorizontalAlignment(SwingConstants.CENTER);
         columnsLabel.setText("Columns:");
 
-        rowsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        rowsLabel.setHorizontalAlignment(SwingConstants.CENTER);
         rowsLabel.setText("Rows:");
 
         authorLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -114,12 +108,6 @@ public class StartWindow extends JFrame {
         soundsTB.addChangeListener(this::soundsSwitch);
         soundsTB.setSelected(true);
 
-        renewHiScore();
-
-        hiScoreResetButton.setText("Reset");
-        hiScoreResetButton.setFocusable(false);
-        hiScoreResetButton.addActionListener(this::resetHiScore);
-
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,8 +116,7 @@ public class StartWindow extends JFrame {
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(hiScoreResetButton)
-                                                .addGap(42, 42, 42)
+                                                .addGap(90, 90, 90)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(startButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(speedLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -142,7 +129,9 @@ public class StartWindow extends JFrame {
                                         .addComponent(speedSlider, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                                        .addComponent(columnsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(columnsLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+                                                                .addGap(0, 0, Short.MAX_VALUE))
                                                         .addComponent(rowsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
@@ -154,23 +143,16 @@ public class StartWindow extends JFrame {
                                                         .addComponent(showNextCB)
                                                         .addComponent(messagesCB)))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(musicTB, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(musicTB, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(soundsTB, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(hiScoreLabel)
-                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                                .addComponent(soundsTB, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addContainerGap())
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(hiScoreLabel)
-                                .addGap(8, 8, 8)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(startButton)
-                                        .addComponent(hiScoreResetButton))
+                                .addComponent(startButton)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(speedLabel)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -208,7 +190,7 @@ public class StartWindow extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                AudioHolder.music.stop();
+                AudioController.stopMusic();
                 AL.destroy();
                 System.exit(0);
             }
@@ -216,25 +198,7 @@ public class StartWindow extends JFrame {
         setResizable(false);
         setTitle("Cheeky bricky: Menu");
         setLocationRelativeTo(null);
-        AudioHolder.music.loop();
-    }
-
-    private void resetHiScore(ActionEvent actionEvent) {
-        try (FileWriter writer = new FileWriter(new File("res/hiscore.txt"))) {
-            writer.write(String.valueOf(0));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        renewHiScore();
-    }
-
-    public void renewHiScore() {
-        try (Scanner scanner = new Scanner(new File("res/hiscore.txt"))) {
-            int hiScore = scanner.nextInt();
-            hiScoreLabel.setText("Hi-score: " + hiScore);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        AudioController.playMusic();
     }
 
     private void setShowMessages(ChangeEvent changeEvent) {
@@ -243,7 +207,7 @@ public class StartWindow extends JFrame {
 
     private void soundsSwitch(ChangeEvent changeEvent) {
         boolean isOn = soundsTB.isSelected();
-        AudioHolder.setSoundsEnabled(isOn);
+        AudioController.setSoundsEnabled(isOn);
         soundsTB.setText("Sounds " + (isOn ? "ON" : "OFF"));
     }
 
@@ -251,9 +215,9 @@ public class StartWindow extends JFrame {
         boolean isOn = musicTB.isSelected();
         musicTB.setText("Music " + (isOn ? "ON" : "OFF"));
         if (isOn)
-            AudioHolder.music.play();
+            AudioController.playMusic();
         else
-            AudioHolder.music.stop();
+            AudioController.stopMusic();
     }
 
     private void setSpeedIncrease(ChangeEvent actionEvent) {
@@ -280,12 +244,10 @@ public class StartWindow extends JFrame {
     private void startButtonPressed(ActionEvent evt) {
         setVisible(false);
         Options.setSpeed(speedSlider.getValue());
-        AudioHolder.buttonClick();
         new Game(this);
     }
 
     public static void main(String args[]) {
-        setLibraryPath();
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -297,26 +259,5 @@ public class StartWindow extends JFrame {
             java.util.logging.Logger.getLogger(StartWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         SwingUtilities.invokeLater(() -> new StartWindow().setVisible(true));
-    }
-
-    private static void setLibraryPath() {
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("nix") || os.contains("nux") || os.contains("aix"))
-            System.setProperty("java.library.path", "libs/native/linux");
-        else if (os.contains("win"))
-            System.setProperty("java.library.path", "libs/native/windows");
-        else if (os.contains("mac"))
-            System.setProperty("java.library.path", "libs/native/macosx");
-        else if (os.contains("sunos"))
-            System.setProperty("java.library.path", "libs/native/solaris");
-        else throw new IllegalStateException("No LWJGL natives for " + os);
-        final Field sysPathsField;
-        try {
-            sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
-            sysPathsField.setAccessible(true);
-            sysPathsField.set(null, null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 }

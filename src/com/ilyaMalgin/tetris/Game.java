@@ -1,19 +1,20 @@
 package com.ilyaMalgin.tetris;
 
+import com.ilyaMalgin.tetris.controllers.AudioController;
+import com.ilyaMalgin.tetris.controllers.KeyboardController;
+import com.ilyaMalgin.tetris.models.Shape;
+import com.ilyaMalgin.tetris.util.Messages;
+import com.ilyaMalgin.tetris.util.Options;
+
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Game extends JFrame implements Runnable {
     //Application stuff
@@ -117,9 +118,10 @@ public class Game extends JFrame implements Runnable {
         gameThread.start();
     }
 
-    public synchronized void stop() {
+    //may not be synchronized as it's always invoked inside "game thread" itself
+    public void stop() {
         running = false;
-        try {
+/*        try {
             if (Thread.currentThread() != gameThread) {
                 dispose();
                 gameThread.join();
@@ -129,7 +131,9 @@ public class Game extends JFrame implements Runnable {
         } finally {
             startWindow.setVisible(true);
             startWindow.setLocationRelativeTo(null);
-        }
+        }*/
+        startWindow.setVisible(true);
+        startWindow.setLocationRelativeTo(null);
     }
 
     @Override
@@ -168,7 +172,6 @@ public class Game extends JFrame implements Runnable {
                 e.printStackTrace();
             }
         }
-        setNewHiScore();
         dispose();
     }
 
@@ -180,7 +183,6 @@ public class Game extends JFrame implements Runnable {
         renewBricksMap();
         if (bricksCollide()) {
             render();
-            System.out.println("LOSE!");
             gameOverScreenState = true;
             running = false;
         }
@@ -190,12 +192,12 @@ public class Game extends JFrame implements Runnable {
         keyboardController.eventsHandled();
         if (keyboardController.escPressed()) {
             gameOverScreenState = false;
-            AudioHolder.music.setVolume(1.0f);
+            AudioController.pauseState(false);
             stop();
         }
         if (keyboardController.pausePressed()) {
             paused = !paused;
-            AudioHolder.music.setVolume(paused ? 0.4f : 1.0f);
+            AudioController.pauseState(paused);
             createBoardImageData(paused ? 0x333333 : boardColor);
             renewScore(0);
             if (running)
@@ -205,10 +207,10 @@ public class Game extends JFrame implements Runnable {
             return;
         if (keyboardController.rightPressed())
             if (currentShape.tryMove(1, 0))
-                AudioHolder.move();
+                AudioController.move();
         if (keyboardController.leftPressed())
             if (currentShape.tryMove(-1, 0))
-                AudioHolder.move();
+                AudioController.move();
         if (keyboardController.rotateLPressed())
             currentShape.rotate(true);
         if (keyboardController.rotateRPressed())
@@ -233,7 +235,7 @@ public class Game extends JFrame implements Runnable {
         }
         if (adjacentFullRows != 0) {
             boardColorChanged = true;
-            boardColor += adjacentFullRows * 0xFF0F0F0F;
+            boardColor += adjacentFullRows * 0xFF080808;
             createBoardImageData(boardColor);
             removeFullLines(firstFullRow, adjacentFullRows);
             renewScore(adjacentFullRows);
@@ -282,7 +284,7 @@ public class Game extends JFrame implements Runnable {
                     break;
             }
         }
-        AudioHolder.line(adjacentFullRows);
+        AudioController.line(adjacentFullRows);
     }
 
     private void blockFallSpeedIncrease() {
@@ -291,7 +293,7 @@ public class Game extends JFrame implements Runnable {
         timePerUpdate = 1_000_000_000 / (Options.getSpeed() / 12);
     }
 
-    public void update() {
+    private void update() {
         if (currentShape.moveEnded())
             spawn();
         renewBricksMap();
@@ -309,7 +311,7 @@ public class Game extends JFrame implements Runnable {
         g.dispose();
     }
 
-    public void render() {
+    private void render() {
         bs = canvas.getBufferStrategy();
         if (bs == null) {
             canvas.createBufferStrategy(2);
@@ -337,9 +339,9 @@ public class Game extends JFrame implements Runnable {
         g.setColor(Color.WHITE);
 
         g.setFont(new Font("Arial", Font.BOLD, 38));
-        String messsage = "Game over";
+        String gameOverMessage = "Game over";
         FontMetrics metrics = g.getFontMetrics();
-        g.drawString(messsage, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics.stringWidth(messsage) / 2, GAME_SCREEN_HEIGHT / 2 - 60);
+        g.drawString(gameOverMessage, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics.stringWidth(gameOverMessage) / 2, GAME_SCREEN_HEIGHT / 2 - 60);
         String scoreMessage = "" + score;
         g.drawString(scoreMessage, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics.stringWidth(scoreMessage) / 2, GAME_SCREEN_HEIGHT / 2);
 
@@ -391,21 +393,5 @@ public class Game extends JFrame implements Runnable {
     public static void renewBricksMap() {
         Collections.fill(bricksMap, 0);
         shapesOnBoard.forEach(shape -> shape.placeOnMap(bricksMap));
-    }
-
-    private void setNewHiScore() {
-        try (Scanner scanner = new Scanner(new File("res/hiscore.txt"))) {
-            int currentHiScore = scanner.nextInt();
-            if (score <= currentHiScore)
-                return;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try (FileWriter writer = new FileWriter(new File("res/hiscore.txt"))) {
-            writer.write(String.valueOf(score));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        startWindow.renewHiScore();
     }
 }
