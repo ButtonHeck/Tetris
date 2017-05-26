@@ -2,7 +2,6 @@ package com.ilyaMalgin.tetris;
 
 import com.ilyaMalgin.tetris.controllers.AudioController;
 import com.ilyaMalgin.tetris.util.Options;
-import org.lwjgl.openal.AL;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -13,23 +12,27 @@ import java.awt.event.WindowEvent;
 
 public class StartWindow extends JFrame {
 
+    /*
+    CB == CheckBox
+    TB == ToggleButton
+     */
     private JButton startButton;
-    private JComboBox<Integer> columnsComboBox, rowsComboBox;
+    private JComboBox<Integer> columnsCB, rowsCB;
     private JLabel nameLabel, columnsLabel, authorLabel, speedLabel, rowsLabel;
     private JSlider speedSlider;
     private JTextArea controlsText;
     private JCheckBox showNextCB, speedIncreaseCB, messagesCB;
     private JToggleButton musicTB, soundsTB;
 
-    public StartWindow() {
+    private StartWindow() {
         initComponents();
     }
 
     private void initComponents() {
         nameLabel = new JLabel();
         startButton = new JButton();
-        columnsComboBox = new JComboBox<>();
-        rowsComboBox = new JComboBox<>();
+        columnsCB = new JComboBox<>();
+        rowsCB = new JComboBox<>();
         speedLabel = new JLabel();
         columnsLabel = new JLabel();
         rowsLabel = new JLabel();
@@ -50,13 +53,13 @@ public class StartWindow extends JFrame {
         startButton.setFocusable(false);
         startButton.addActionListener(this::startButtonPressed);
 
-        columnsComboBox.setModel(new DefaultComboBoxModel<>(new Integer[]{14, 15, 16}));
-        columnsComboBox.addActionListener(this::setColumns);
-        columnsComboBox.getModel().setSelectedItem(14);
+        columnsCB.setModel(new DefaultComboBoxModel<>(new Integer[]{14, 15, 16}));
+        columnsCB.addActionListener(this::setColumns);
+        columnsCB.getModel().setSelectedItem(14);
 
-        rowsComboBox.setModel(new DefaultComboBoxModel<>(new Integer[]{8, 9, 10}));
-        rowsComboBox.addActionListener(this::setRows);
-        rowsComboBox.getModel().setSelectedItem(8);
+        rowsCB.setModel(new DefaultComboBoxModel<>(new Integer[]{8, 9, 10}));
+        rowsCB.addActionListener(this::setRows);
+        rowsCB.getModel().setSelectedItem(8);
 
         columnsLabel.setHorizontalAlignment(SwingConstants.CENTER);
         columnsLabel.setText("Columns:");
@@ -135,8 +138,8 @@ public class StartWindow extends JFrame {
                                                         .addComponent(rowsLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                        .addComponent(rowsComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(columnsComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(rowsCB, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(columnsCB, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addGap(18, 18, 18)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(speedIncreaseCB)
@@ -161,11 +164,11 @@ public class StartWindow extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(columnsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(columnsCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(columnsLabel))
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(rowsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(rowsCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(rowsLabel))
                                                 .addGap(36, 36, 36)
                                                 .addComponent(controlsText, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
@@ -190,8 +193,7 @@ public class StartWindow extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                AudioController.stopMusic();
-                AL.destroy();
+                AudioController.finish();
                 System.exit(0);
             }
         });
@@ -234,11 +236,11 @@ public class StartWindow extends JFrame {
     }
 
     private void setColumns(ActionEvent evt) {
-        Options.setColumns(columnsComboBox.getItemAt(columnsComboBox.getSelectedIndex()));
+        Options.setColumns(columnsCB.getItemAt(columnsCB.getSelectedIndex()));
     }
 
     private void setRows(ActionEvent event) {
-        Options.setRows(rowsComboBox.getItemAt(rowsComboBox.getSelectedIndex()));
+        Options.setRows(rowsCB.getItemAt(rowsCB.getSelectedIndex()));
     }
 
     private void startButtonPressed(ActionEvent evt) {

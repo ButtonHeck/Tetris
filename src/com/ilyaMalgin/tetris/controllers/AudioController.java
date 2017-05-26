@@ -1,5 +1,6 @@
 package com.ilyaMalgin.tetris.controllers;
 
+import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -83,5 +84,10 @@ public class AudioController {
 
     public static void setSoundsEnabled(boolean soundsEnabled) {
         AudioController.soundsEnabled = soundsEnabled;
+    }
+
+    public static void finish() {
+        AudioController.stopMusic();
+        AL.destroy();
     }
 }

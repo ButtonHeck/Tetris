@@ -5,31 +5,36 @@ import com.ilyaMalgin.tetris.Game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Block {
+class Block {
 
+    /*
+    glob == global (coordinate of a block on map)
+    rel == relative (coordinate of a block relative to the block with [0;0] coordinates which doesn't change coordinate
+        when a shape is being turned)
+     */
     private int globX, globY, relX, relY;
     private Shape parent;
     private BufferedImage image;
 
-    public Block(int globalX, int globalY) {
+    Block(int globalX, int globalY) {
         this.globX = globalX;
         this.globY = globalY;
         relX = globalX;
         relY = globalY;
     }
 
-    public void setBlockImage(BufferedImage image) {
+    void setBlockImage(BufferedImage image) {
         this.image = image;
     }
 
-    public void render(Graphics g, boolean isCurrent) {
+    void render(Graphics g, boolean isCurrent) {
         g.drawImage(image,
                 isCurrent ? globX * Game.BLOCK_SIZE : Game.GAME_SCREEN_WIDTH + (relX + (parent.getBlockPattern() <= 4 ? 1 : 2)) * Game.BLOCK_SIZE + (parent.getBlockPattern() == 1 ? 30 : 10),
                 globY * Game.BLOCK_SIZE + (isCurrent ? 0 : 60),
                 null);
     }
 
-    public void relocate(int dx, int dy) {
+    void relocate(int dx, int dy) {
         globX += dx;
         globY += dy;
         relX += dx;
@@ -38,31 +43,31 @@ public class Block {
 
     //Getters and Setters
 
-    public int getGlobX() {
+    int getGlobX() {
         return globX;
     }
 
-    public void setGlobX(int globX) {
+    void setGlobX(int globX) {
         this.globX = globX;
     }
 
-    public int getGlobY() {
+    int getGlobY() {
         return globY;
     }
 
-    public void setGlobY(int globY) {
+    void setGlobY(int globY) {
         this.globY = globY;
     }
 
-    public void setParent(Shape parent) {
+    void setParent(Shape parent) {
         this.parent = parent;
     }
 
-    public int getRelY() {
+    int getRelY() {
         return relY;
     }
 
-    public int getRelX() {
+    int getRelX() {
         return relX;
     }
 }

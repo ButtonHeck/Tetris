@@ -13,7 +13,7 @@ import java.util.Random;
 public class Shape {
 
     private static int spawnX = Game.GRID_WIDTH / 2 - 1;
-    private int x, y;
+    private int x, y; //offset of the shape on the global map
     private final ArrayList<Block> blocks;
     private final boolean rotatable;
     private volatile boolean moveEnded = false;
@@ -32,8 +32,8 @@ public class Shape {
     private static final Shape[] shapes = new Shape[]{L_SHAPE, T_SHAPE, I_SHAPE, CUBE_SHAPE, Z_SHAPE, L_MIRROR_SHAPE, Z_MIRROR_SHAPE};
 
     private Shape(boolean rotatable, int blockPattern, BufferedImage[] images) {
-        this.x = blockPattern <= 4 ? spawnX : spawnX + 1;
-        this.y = 1;
+        x = blockPattern <= 4 ? spawnX : spawnX + 1;
+        y = 1;
         this.blocks = new ArrayList<>();
         this.rotatable = rotatable;
         this.blockPattern = blockPattern;
@@ -41,9 +41,9 @@ public class Shape {
         Collections.addAll(blocks, BlockPatterns.getBlocks(blockPattern));
         blocks.forEach(e -> {
             e.setParent(this);
-            e.setBlockImage(images[++imageSeed % 3]);
-            e.setGlobX(e.getGlobX() + this.x);
-            e.setGlobY(e.getGlobY() + this.y);
+            e.setBlockImage(images[Math.abs(++imageSeed % 3)]);
+            e.setGlobX(e.getGlobX() + x);
+            e.setGlobY(e.getGlobY() + y);
         });
     }
 
@@ -118,7 +118,7 @@ public class Shape {
             block.relocate(dx, dy);
         });
         Game.renewBricksMap();
-        if (Game.bricksCollide()) {
+        if (Game.bricksCollide()) { //undo previous rotation
             blocks.forEach(block -> {
                 int dx = (left ? block.getRelY() : -block.getRelY()) - block.getRelX();
                 int dy = (left ? -block.getRelX() : block.getRelX()) - block.getRelY();
@@ -132,11 +132,8 @@ public class Shape {
     private boolean impossibleToRotate(Block block, boolean left) {
         int dx = (left ? -block.getRelY() : block.getRelY()) - block.getRelX();
         int dy = (left ? block.getRelX() : -block.getRelX()) - block.getRelY();
-        if (block.getGlobX() + dx < 0 || block.getGlobX() + dx > Game.GRID_WIDTH - 1
-                || block.getGlobY() + dy < 0 || block.getGlobY() + dy > Game.GRID_HEIGHT - 1) {
-            return true;
-        }
-        return false;
+        return block.getGlobX() + dx < 0 || block.getGlobX() + dx > Game.GRID_WIDTH - 1
+                || block.getGlobY() + dy < 0 || block.getGlobY() + dy > Game.GRID_HEIGHT - 1;
     }
 
     public void placeOnMap(ArrayList<Integer> map) {

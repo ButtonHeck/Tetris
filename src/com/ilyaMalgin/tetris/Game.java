@@ -27,10 +27,10 @@ public class Game extends JFrame implements Runnable {
     private StartWindow startWindow;
     private Thread gameThread;
     private BufferStrategy bs;
-    private Graphics g;
+    private Graphics graphics;
     private int[] pixels;
     private BufferedImage boardImage;
-    private Canvas canvas;
+    private Canvas gameCanvas;
     private int boardColor = 0xFF889999, score = 0, nextSpeedIncreaseScore = 10;
     private JLabel messageLabel = new JLabel(Messages.START);
     private double timePerUpdate;
@@ -64,11 +64,11 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initializeCanvasParameters() {
-        canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH, GAME_SCREEN_HEIGHT));
-        canvas.setMaximumSize(new Dimension(GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH, GAME_SCREEN_HEIGHT));
-        canvas.setMinimumSize(new Dimension(GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH, GAME_SCREEN_HEIGHT));
-        add(canvas);
+        gameCanvas = new Canvas();
+        gameCanvas.setPreferredSize(new Dimension(GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH, GAME_SCREEN_HEIGHT));
+        gameCanvas.setMaximumSize(new Dimension(GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH, GAME_SCREEN_HEIGHT));
+        gameCanvas.setMinimumSize(new Dimension(GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH, GAME_SCREEN_HEIGHT));
+        add(gameCanvas);
     }
 
     private void initializeGraphicsData() {
@@ -93,45 +93,40 @@ public class Game extends JFrame implements Runnable {
         BorderLayout layout = new BorderLayout(0, 0);
         messageLabel.setBorder(new MatteBorder(2, 1, 1, 1, Color.BLACK));
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        layout.addLayoutComponent(canvas, BorderLayout.NORTH);
+        layout.addLayoutComponent(gameCanvas, BorderLayout.NORTH);
         layout.addLayoutComponent(messageLabel, BorderLayout.SOUTH);
         setLayout(layout);
     }
 
+    /* while using Canvas object we have to set "resizable" parameter before packing,
+       otherwise the output looking would be different on windows, linux, and mac.
+       (on Windows the gameCanvas object would have additional empty space on the right and bottom sides of the screen)
+       why does this happen - dunno...
+       And yes, using Swing components mixed with AWT (such as Canvas) - not a good practice
+       */
     private void allocateGameOnScreen() {
-        pack();
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
         setResizable(false);
         setTitle("Cheeky bricky: Game");
-        canvas.requestFocusInWindow();
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        gameCanvas.requestFocusInWindow();
     }
 
     private void initializeInputListeners() {
         keyboardController = new KeyboardController();
-        canvas.addKeyListener(keyboardController);
+        gameCanvas.addKeyListener(keyboardController);
     }
 
-    public synchronized void start() {
+    private synchronized void start() {
         running = true;
         gameThread.start();
     }
 
     //may not be synchronized as it's always invoked inside "game thread" itself
-    public void stop() {
+    private void stop() {
         running = false;
-/*        try {
-            if (Thread.currentThread() != gameThread) {
-                dispose();
-                gameThread.join();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            startWindow.setVisible(true);
-            startWindow.setLocationRelativeTo(null);
-        }*/
         startWindow.setVisible(true);
         startWindow.setLocationRelativeTo(null);
     }
@@ -181,7 +176,7 @@ public class Game extends JFrame implements Runnable {
         nextShape = Shape.getRandomShape();
         shapesOnBoard.add(currentShape);
         renewBricksMap();
-        if (bricksCollide()) {
+        if (bricksCollide()) { //if we have collision right after a shape was spawned -> gameOver
             render();
             gameOverScreenState = true;
             running = false;
@@ -300,27 +295,27 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void renderBeforeFirstUpdate() {
-        bs = canvas.getBufferStrategy();
+        bs = gameCanvas.getBufferStrategy();
         if (bs == null) {
-            canvas.createBufferStrategy(2);
+            gameCanvas.createBufferStrategy(2);
             renderBeforeFirstUpdate();
         }
-        g = bs.getDrawGraphics();
-        g.drawImage(boardImage, 0, 0, null);
+        graphics = bs.getDrawGraphics();
+        graphics.drawImage(boardImage, 0, 0, null);
         bs.show();
-        g.dispose();
+        graphics.dispose();
     }
 
     private void render() {
-        bs = canvas.getBufferStrategy();
+        bs = gameCanvas.getBufferStrategy();
         if (bs == null) {
-            canvas.createBufferStrategy(2);
+            gameCanvas.createBufferStrategy(2);
             return;
         }
-        g = bs.getDrawGraphics();
-        g.drawImage(boardImage, 0, 0, null);
+        graphics = bs.getDrawGraphics();
+        graphics.drawImage(boardImage, 0, 0, null);
         for (int i = 0; i < shapesOnBoard.size(); i++) {
-            shapesOnBoard.get(i).render(g, true);
+            shapesOnBoard.get(i).render(graphics, true);
         }
         if (boardColorChanged) {
             boardColor = 0xFF889999;
@@ -329,40 +324,40 @@ public class Game extends JFrame implements Runnable {
         }
         renderSideParts();
         bs.show();
-        g.dispose();
+        graphics.dispose();
     }
 
     private void renderGameOverScreen() {
-        g = bs.getDrawGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
-        g.setColor(Color.WHITE);
+        graphics = bs.getDrawGraphics();
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0, 0, GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
+        graphics.setColor(Color.WHITE);
 
-        g.setFont(new Font("Arial", Font.BOLD, 38));
+        graphics.setFont(new Font("Arial", Font.BOLD, 38));
         String gameOverMessage = "Game over";
-        FontMetrics metrics = g.getFontMetrics();
-        g.drawString(gameOverMessage, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics.stringWidth(gameOverMessage) / 2, GAME_SCREEN_HEIGHT / 2 - 60);
+        FontMetrics metrics = graphics.getFontMetrics();
+        graphics.drawString(gameOverMessage, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics.stringWidth(gameOverMessage) / 2, GAME_SCREEN_HEIGHT / 2 - 60);
         String scoreMessage = "" + score;
-        g.drawString(scoreMessage, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics.stringWidth(scoreMessage) / 2, GAME_SCREEN_HEIGHT / 2);
+        graphics.drawString(scoreMessage, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics.stringWidth(scoreMessage) / 2, GAME_SCREEN_HEIGHT / 2);
 
-        g.setFont(new Font("Arial", Font.BOLD, 28));
-        FontMetrics metrics2 = g.getFontMetrics();
+        graphics.setFont(new Font("Arial", Font.BOLD, 28));
+        FontMetrics metrics2 = graphics.getFontMetrics();
         String escHint = "Press ESC to back to menu";
-        g.drawString(escHint, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics2.stringWidth(escHint) / 2, GAME_SCREEN_HEIGHT / 2 + 60);
+        graphics.drawString(escHint, (GAME_SCREEN_WIDTH + SIDE_PART_SCREEN_WIDTH) / 2 - metrics2.stringWidth(escHint) / 2, GAME_SCREEN_HEIGHT / 2 + 60);
         bs.show();
-        g.dispose();
+        graphics.dispose();
     }
 
     private void renderSideParts() {
-        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        graphics.setFont(new Font("Arial", Font.PLAIN, 20));
+        graphics.clearRect(GAME_SCREEN_WIDTH, 0, 200, GAME_SCREEN_HEIGHT);
         if (Options.getShowNext()) {
-            g.clearRect(GAME_SCREEN_WIDTH, 0, 200, GAME_SCREEN_HEIGHT);
-            nextShape.render(g, false);
-            g.drawLine(GAME_SCREEN_WIDTH, 0, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
-            g.drawString("Next:", GAME_SCREEN_WIDTH + 60, 40);
+            nextShape.render(graphics, false);
+            graphics.drawLine(GAME_SCREEN_WIDTH, 0, GAME_SCREEN_WIDTH, GAME_SCREEN_HEIGHT);
+            graphics.drawString("Next:", GAME_SCREEN_WIDTH + 60, 40);
         }
-        g.drawString("Score " + score, GAME_SCREEN_WIDTH + 10, 240);
-        g.drawString("Speed: " + Options.getSpeed(), GAME_SCREEN_WIDTH + 10, 270);
+        graphics.drawString("Score " + score, GAME_SCREEN_WIDTH + 10, 240);
+        graphics.drawString("Speed: " + Options.getSpeed(), GAME_SCREEN_WIDTH + 10, 270);
     }
 
     private void createBoardImageData(int boardColor) {

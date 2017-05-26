@@ -64,7 +64,7 @@ public abstract class BlockPatterns {
         };
     }
 
-    public static Block[] getBlocks(int blockPattern) {
+    static Block[] getBlocks(int blockPattern) {
         switch (blockPattern) {
             case 0: {
                 return get_L_pattern();
