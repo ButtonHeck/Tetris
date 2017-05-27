@@ -68,7 +68,7 @@ public class StartWindow extends JFrame {
         rowsLabel.setText("Rows:");
 
         authorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        authorLabel.setText("Made by Ilya Malgin, 2017");
+        authorLabel.setText("Made by ButtonHeck, 2017");
         authorLabel.setForeground(Color.DARK_GRAY);
 
         speedSlider.setMajorTickSpacing(5);
