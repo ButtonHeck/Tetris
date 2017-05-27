@@ -1,7 +1,7 @@
-package com.ilyaMalgin.tetris;
+package com.buttonHeck.tetris;
 
-import com.ilyaMalgin.tetris.controllers.AudioController;
-import com.ilyaMalgin.tetris.util.Options;
+import com.buttonHeck.tetris.controllers.AudioController;
+import com.buttonHeck.tetris.util.Options;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

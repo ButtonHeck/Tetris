@@ -1,4 +1,4 @@
-package com.ilyaMalgin.tetris.models;
+package com.buttonHeck.tetris.models;
 
 public abstract class BlockPatterns {
     private static Block[] get_L_pattern() {

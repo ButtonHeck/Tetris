@@ -1,4 +1,4 @@
-package com.ilyaMalgin.tetris;
+package com.buttonHeck.tetris;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

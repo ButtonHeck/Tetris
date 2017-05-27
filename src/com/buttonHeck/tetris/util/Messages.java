@@ -1,4 +1,4 @@
-package com.ilyaMalgin.tetris.util;
+package com.buttonHeck.tetris.util;
 
 public abstract class Messages {
 

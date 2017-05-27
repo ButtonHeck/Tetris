@@ -1,6 +1,6 @@
-package com.ilyaMalgin.tetris.models;
+package com.buttonHeck.tetris.models;
 
-import com.ilyaMalgin.tetris.Game;
+import com.buttonHeck.tetris.Game;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,7 +13,7 @@ class Block {
         when a shape is being turned)
      */
     private int globX, globY, relX, relY;
-    private Shape parent;
+    private com.buttonHeck.tetris.models.Shape parent;
     private BufferedImage image;
 
     Block(int globalX, int globalY) {
@@ -59,7 +59,7 @@ class Block {
         this.globY = globY;
     }
 
-    void setParent(Shape parent) {
+    void setParent(com.buttonHeck.tetris.models.Shape parent) {
         this.parent = parent;
     }
 

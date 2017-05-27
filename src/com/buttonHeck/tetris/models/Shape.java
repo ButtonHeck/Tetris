@@ -1,8 +1,8 @@
-package com.ilyaMalgin.tetris.models;
+package com.buttonHeck.tetris.models;
 
-import com.ilyaMalgin.tetris.BlockSheet;
-import com.ilyaMalgin.tetris.Game;
-import com.ilyaMalgin.tetris.controllers.AudioController;
+import com.buttonHeck.tetris.BlockSheet;
+import com.buttonHeck.tetris.Game;
+import com.buttonHeck.tetris.controllers.AudioController;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

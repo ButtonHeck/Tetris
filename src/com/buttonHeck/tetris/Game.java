@@ -1,10 +1,10 @@
-package com.ilyaMalgin.tetris;
+package com.buttonHeck.tetris;
 
-import com.ilyaMalgin.tetris.controllers.AudioController;
-import com.ilyaMalgin.tetris.controllers.KeyboardController;
-import com.ilyaMalgin.tetris.models.Shape;
-import com.ilyaMalgin.tetris.util.Messages;
-import com.ilyaMalgin.tetris.util.Options;
+import com.buttonHeck.tetris.controllers.AudioController;
+import com.buttonHeck.tetris.controllers.KeyboardController;
+import com.buttonHeck.tetris.models.Shape;
+import com.buttonHeck.tetris.util.Messages;
+import com.buttonHeck.tetris.util.Options;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
