@@ -9,32 +9,10 @@
     <bookmark url="file://$PROJECT_DIR$/src/com/buttonHeck/tetris/util/Messages.java" line="37" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ca78910-0522-4746-9c3a-8e633ba33e7b" name="Default" comment="changed package name">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/BlockSheet.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/Game.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/StartWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/StartWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/controllers/AudioController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/controllers/KeyboardController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/models/Block.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/models/BlockPatterns.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/models/Shape.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/util/Messages.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/Tetris/com/ilyaMalgin/tetris/util/Options.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/controllers/AudioController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/controllers/KeyboardController.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/BlockSheet.java" afterPath="$PROJECT_DIR$/src/com/buttonHeck/tetris/BlockSheet.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/Game.java" afterPath="$PROJECT_DIR$/src/com/buttonHeck/tetris/Game.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/StartWindow.java" afterPath="$PROJECT_DIR$/src/com/buttonHeck/tetris/StartWindow.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/models/Block.java" afterPath="$PROJECT_DIR$/src/com/buttonHeck/tetris/models/Block.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/models/BlockPatterns.java" afterPath="$PROJECT_DIR$/src/com/buttonHeck/tetris/models/BlockPatterns.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/models/Shape.java" afterPath="$PROJECT_DIR$/src/com/buttonHeck/tetris/models/Shape.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/util/Messages.java" afterPath="$PROJECT_DIR$/src/com/buttonHeck/tetris/util/Messages.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/ilyaMalgin/tetris/util/Options.java" afterPath="$PROJECT_DIR$/src/com/buttonHeck/tetris/util/Options.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/Tetris_jar/Tetris.jar" afterPath="$PROJECT_DIR$/out/artifacts/Tetris_jar/Tetris.jar" />
+    <list default="true" id="9ca78910-0522-4746-9c3a-8e633ba33e7b" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/executables/Tetris_linux.jar" afterPath="$PROJECT_DIR$/executables/Tetris_linux.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/executables/Tetris_windows.exe" afterPath="$PROJECT_DIR$/executables/Tetris_windows.exe" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Tetris/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/out/production/Tetris/META-INF/MANIFEST.MF" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
     </list>
     <ignored path="Tetris.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -84,8 +62,8 @@
       <file leaf-file-name="StartWindow.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/buttonHeck/tetris/StartWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="105" column="53" lean-forward="true" selection-start-line="105" selection-start-column="53" selection-end-line="105" selection-end-column="53" />
+            <state relative-caret-position="321">
+              <caret line="106" column="34" lean-forward="true" selection-start-line="106" selection-start-column="34" selection-end-line="106" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -283,11 +261,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tetris" />
+              <option name="myItemId" value="executables" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -608,12 +582,19 @@
       <option name="project" value="LOCAL" />
       <updated>1495909284078</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="changed package name">
+      <created>1495909700881</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1495909700881</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="41" y="24" width="1399" height="876" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -630,7 +611,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19156541" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19156541" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1011,8 +992,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/buttonHeck/tetris/StartWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="105" column="53" lean-forward="true" selection-start-line="105" selection-start-column="53" selection-end-line="105" selection-end-column="53" />
+        <state relative-caret-position="321">
+          <caret line="106" column="34" lean-forward="true" selection-start-line="106" selection-start-column="34" selection-end-line="106" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
