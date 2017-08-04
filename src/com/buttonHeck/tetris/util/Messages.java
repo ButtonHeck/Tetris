@@ -1,7 +1,10 @@
 package com.buttonHeck.tetris.util;
 
+import java.util.Random;
+
 public abstract class Messages {
 
+    private final static Random RANDOM = new Random(System.currentTimeMillis());
     public static final String
             START = "so far, so good";
 
@@ -30,13 +33,20 @@ public abstract class Messages {
             THREE_LINES5 = "Tetris level: Pro",
             THREE_LINES6 = "now let's get all four!",
 
-            FOUR_LINES1 = "Tetris level: GOD!",
-            FOUR_LINES2 = "superhot!",
+    FOUR_LINES1 = "Tetris level: GOD!",
+            FOUR_LINES2 = "SUPERHOT!",
             FOUR_LINES3 = "keep rocking!",
             FOUR_LINES4 = "You are the best!";
 
-    public static final String[] L1 = {ONE_LINE1, ONE_LINE2, ONE_LINE3, ONE_LINE4, ONE_LINE5, ONE_LINE6, ONE_LINE7, ONE_LINE8},
+    private static final String[] L1 = {ONE_LINE1, ONE_LINE2, ONE_LINE3, ONE_LINE4, ONE_LINE5, ONE_LINE6, ONE_LINE7, ONE_LINE8},
             L2 = {TWO_LINES1, TWO_LINES2, TWO_LINES3, TWO_LINES4, TWO_LINES5, TWO_LINES6, TWO_LINES7},
             L3 = {THREE_LINES1, THREE_LINES2, THREE_LINES3, THREE_LINES4, THREE_LINES5, THREE_LINES6},
             L4 = {FOUR_LINES1, FOUR_LINES2, FOUR_LINES3, FOUR_LINES4};
+
+    private static final String[][] MESSAGES = new String[][]{L1, L2, L3, L4};
+
+    public static String getMessageFor(int adjacentFullRows) {
+        String[] messagesForLineCount = MESSAGES[adjacentFullRows - 1];
+        return messagesForLineCount[RANDOM.nextInt(messagesForLineCount.length)];
+    }
 }

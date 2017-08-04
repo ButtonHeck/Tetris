@@ -39,7 +39,7 @@ public class Options {
         return showNext;
     }
 
-    public static boolean isSpeedIncrease() {
+    public static boolean isSpeedIncreaseOn() {
         return speedIncrease;
     }
 
@@ -47,7 +47,7 @@ public class Options {
         Options.speedIncrease = speedIncrease;
     }
 
-    public static boolean isShowMessages() {
+    public static boolean isShowMessagesOn() {
         return showMessages;
     }
 
